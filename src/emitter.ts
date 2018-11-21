@@ -5,23 +5,23 @@ class Emitter {
     private static _instance: Emitter = null;
     private static io: socket_io.Server = null;
 
-    static Emitter(){
+    private static Emitter() {
         this.incomingConnectionHandler = this.incomingConnectionHandler.bind(this);
     }
 
-    public static initialize(server: Server) {
-        this.io = socket_io(server);
-        this.io.on("connection", this.incomingConnectionHandler);
+    public initialize(server: Server) {
+        Emitter.io = socket_io(server);
+        Emitter.io.on("connection", Emitter.incomingConnectionHandler);
     }
 
-    public static getInstance() {
+    public static get Instance(): Emitter {
         if (!this._instance) this._instance = new Emitter();
         return this._instance;
     }
 
-    private static incomingConnectionHandler(){
+    private static incomingConnectionHandler(socket: socket_io.Socket) {
         // Triggered when a new device connects to socket
     }
 }
 
-export default Emitter.getInstance();
+export default Emitter.Instance;
