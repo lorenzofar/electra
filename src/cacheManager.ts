@@ -14,17 +14,17 @@ class CacheManager {
     /* ===== CACHE MANAGEMENT ===== */
     public addEntry(user: User): boolean {
 
-        if (this.isUserPresent(user.id)) return false;
-        CacheManager._cache[user.id] = {
+        if (this.isUserPresent(user.email)) return false;
+        CacheManager._cache[user.email] = {
             user: user,
             data: []
         };
         return true;
     }
 
-    public removeEntry(id: string): boolean {
-        if (!(this.isUserPresent(id))) return false;
-        delete CacheManager._cache[id];
+    public removeEntry(email: string): boolean {
+        if (!(this.isUserPresent(email))) return false;
+        delete CacheManager._cache[email];
         return true;
     }
 

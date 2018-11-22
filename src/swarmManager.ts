@@ -24,7 +24,7 @@ class SwarmManager {
 
     public removeUser(user: User): boolean {
         //TODO: Notify cacheManager
-        let result = CacheManager.removeEntry(user.id);
+        let result = CacheManager.removeEntry(user.email);
         return result;
     }
 }
