@@ -1,4 +1,10 @@
 export default interface User {
-    id: string;
+    email: string;
     name: string;
+    surname: string;
+    gender?: "male" | "female";
+    profile_image?: string;
+    rank?: number;
+    role?: "standard" | "admin" | "trainer" | "nutritionist" | "psychologist";
+    birthday?: Date;
 }
