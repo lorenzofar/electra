@@ -2,26 +2,30 @@ import * as socket_io from "socket.io";
 import { Server } from "http";
 
 class Emitter {
-    private static _instance: Emitter = null;
     private static io: socket_io.Server = null;
 
-    private static Emitter() {
+    static initialize() {
         this.incomingConnectionHandler = this.incomingConnectionHandler.bind(this);
+        this.disconnectionHandler = this.disconnectionHandler.bind(this);
     }
 
-    public initialize(server: Server) {
-        Emitter.io = socket_io(server);
-        Emitter.io.on("connection", Emitter.incomingConnectionHandler);
-    }
-
-    public static get Instance(): Emitter {
-        if (!this._instance) this._instance = new Emitter();
-        return this._instance;
+    public static configureSocket(server: Server) {
+        this.io = socket_io(server);
+        this.io.on("connection", this.incomingConnectionHandler);
     }
 
     private static incomingConnectionHandler(socket: socket_io.Socket) {
-        // Triggered when a new device connects to socket
+        console.log("client connected");
+        socket.on("disconnect", this.disconnectionHandler);
+        //TODO: Save client data and bind disconnection handler to him
+        
+    }
+
+    private static disconnectionHandler(socket: socket_io.Socket){
+        console.log("client disconnected");
     }
 }
 
-export default Emitter.Instance;
+Emitter.initialize();
+
+export default Emitter;

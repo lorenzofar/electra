@@ -1,20 +1,20 @@
 /* ===== EXTERNAL MODULES ===== */
-import * as polka from "polka";
+require("dotenv").config();
 import * as http from "http";
 
 /* ===== CUSTOM MODULES ===== */
 import Emitter from "./emitter";
 
-const port = process.env.PORT || 3000;
+const { PORT = 3000 } = process.env; // Get custom port oof fall back to 3000
 
-const app = http.createServer();
-Emitter.initialize(app);
+/* ===== SERVER INITIALIZATION ===== */
+const server = http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end("server up");
+})
+server.listen(PORT, () => {
+    console.log(`> server listening on port ${PORT}`)
+});
 
-polka({ app })
-    .get('/', (req, res) => {
-        res.end("Server up");
-    })
-    .listen(port, err => {
-        if (err) throw err;
-        console.log(`> Running on localhost:3000`);
-    });
+/* ===== WEBSOCKET CONFIGURATION ===== */
+Emitter.configureSocket(server);
