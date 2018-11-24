@@ -2,17 +2,10 @@ import UsersCache from "models/usersCache";
 import User from "models/user";
 
 class CacheManager {
-
-    private static _instance: CacheManager = null;
     private static _cache: UsersCache = {};
 
-    public static get Instance(): CacheManager {
-        if (this._instance) this._instance = new CacheManager();
-        return this._instance;
-    }
-
     /* ===== CACHE MANAGEMENT ===== */
-    public addEntry(user: User): boolean {
+    public static addEntry(user: User): boolean {
 
         if (this.isUserPresent(user.email)) return false;
         CacheManager._cache[user.email] = {
@@ -22,23 +15,23 @@ class CacheManager {
         return true;
     }
 
-    public removeEntry(email: string): boolean {
+    public static removeEntry(email: string): boolean {
         if (!(this.isUserPresent(email))) return false;
         delete CacheManager._cache[email];
         return true;
-    }
+    }// Validate email
 
     /* ===== DATA PROVIDERS ===== */
-    public get keys(): string[] {
+    public static get keys(): string[] {
         return Object.keys(CacheManager._cache);
     }
 
-    public getUser(key: string) {
+    public static getUser(key: string) {
         if (!(key in CacheManager._cache)) return null;
         return CacheManager._cache[key].user;
 
     }
-    public getData(key: string) {
+    public static getData(key: string) {
         if (!(key in CacheManager._cache)) return null;
         return CacheManager._cache[key].data;
     }
@@ -48,11 +41,11 @@ class CacheManager {
      * Check if a user is already in cache
      * @param id ID of user to test
      */
-    private isUserPresent(id: string): boolean {
+    public static isUserPresent(id: string): boolean {
         if (id in CacheManager._cache) return true;
         else return false;
     }
 
 }
 
-export default CacheManager.Instance;
+export default CacheManager;
