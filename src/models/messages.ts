@@ -9,5 +9,5 @@
   */
  export interface socketHandshake extends SocketIO.Handshake{
     email: string;
-    token: string;
+    password: string;
  }
