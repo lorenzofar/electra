@@ -1,11 +1,11 @@
-import UsersCache from "models/usersCache";
-import User from "models/user";
+import UsersCache from "models/cache";
+import Client from "models/client";
 
 class CacheManager {
     private static _cache: UsersCache = {};
 
     /* ===== CACHE MANAGEMENT ===== */
-    public static addEntry(user: User): boolean {
+    public static addEntry(user: Client): boolean {
 
         if (this.isUserPresent(user.email)) return false;
         CacheManager._cache[user.email] = {
