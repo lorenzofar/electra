@@ -1,6 +1,8 @@
-import User from "./user";
+import Client from "./client";
+import Listener from "./listener";
+import DataPoint from "./dataPoint";
 
-export default interface CacheEntry{
-    user: User;
-    data: CacheEntry[];
+export default interface cacheEntry{
+    user: Client | Listener; // Socket, admin rights and email
+    data: DataPoint[]; // Collection of data points
 }
