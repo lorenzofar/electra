@@ -6,6 +6,7 @@ import * as messages from "./models/messages";
 import Validator from "./validator";
 import Dispatcher from "./dispatcher";
 import SwarmManager from "./swarmManager";
+import CacheManager from "./cacheManager";
 
 import Listener from "models/listener";
 import Client from "models/client";
@@ -75,7 +76,7 @@ class Emitter {
                 }
                 //TODO: Assign admin rights
                 let additionResult = Dispatcher.addListener(newListener);
-                if(!additionResult){
+                if (!additionResult) {
                     socket.send("insertionError").disconnect();
                     return;
                 }
@@ -85,12 +86,17 @@ class Emitter {
                     email: clientData.email
                 }
                 let additionResult = SwarmManager.addClient(newClient);
-                if(!additionResult) {
+                if (!additionResult) {
                     // Check if the client has been succesfully added to the swarm
                     // If not, send an error message and disconnect
                     socket.send("insertionError").disconnect();
-                    return;                    
+                    return;
                 }
+                // Add listener for data point events
+                // Bind method to client information
+                socket.on("data",
+                    CacheManager.handleIncomingDataPoint.bind(this, socket, clientData.email)
+                );
             }
         });
     }

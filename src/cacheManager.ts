@@ -1,6 +1,7 @@
+import * as socket_io from "socket.io";
+
 import Cache from "models/cache";
 import Client from "models/client";
-import Listener from "models/listener";
 
 class CacheManager {
     private static _cache: Cache = {};
@@ -39,6 +40,13 @@ class CacheManager {
     public static getData(key: string) {
         if (!(key in this._cache)) return null;
         return this._cache[key].data;
+    }
+
+    /* ===== DATA HANDLING ===== */
+    //TODO: Change datatype of parameter
+    public static handleIncomingDataPoint(socket: socket_io.Socket, email: string, dataPoint: any){
+        console.log(`[CACHE] received data point from ${email}`);
+        console.log(`[CACHE] ${email} says '${dataPoint}'`);
     }
 
     /* ===== UTILITIES ===== */
