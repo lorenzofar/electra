@@ -1,5 +1,6 @@
 import Cache from "models/cache";
 import Client from "models/client";
+import Listener from "models/listener";
 
 class CacheManager {
     private static _cache: Cache = {};
@@ -24,6 +25,10 @@ class CacheManager {
     /* ===== DATA PROVIDERS ===== */
     public static get keys(): string[] {
         return Object.keys(this._cache);
+    }
+
+    public static get users(): Client[]{
+        return Object.keys(this._cache).map(k => this._cache[k].user);
     }
 
     public static getUser(key: string) {
