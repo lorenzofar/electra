@@ -21,8 +21,11 @@ class Dispatcher {
      */
     public static addListener(listener: Listener): boolean {
         // Check if the listener has already registered
-        if(this.isListenerPresent(listener.email)) return false;
-        
+        if (this.isListenerPresent(listener.email)) {
+            console.log(`[DISPATCHER] rejected ${listener.email} as listener`);
+            return false;
+        }
+
         console.log(`[DISPATCHER] adding ${listener.email} as listener`);
         this.listeners.push(listener);
         this.sendWelcomeData(listener);
