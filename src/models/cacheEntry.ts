@@ -3,6 +3,6 @@ import Listener from "./listener";
 import DataPoint from "./dataPoint";
 
 export default interface cacheEntry{
-    user: Client | Listener; // Socket, admin rights and email
+    user: Client; // Socket, admin rights and email
     data: DataPoint[]; // Collection of data points
 }
