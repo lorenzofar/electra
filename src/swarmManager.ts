@@ -1,30 +1,25 @@
-import User from "./models/user";
+import Client from "./models/client";
 import CacheManager from "./cacheManager";
 
 class SwarmManager {
-    private static _instance: SwarmManager = null;
-
-    public static get Instance(): SwarmManager {
-        if (this._instance) this._instance = new SwarmManager();
-        return this._instance;
-    }
-
     /* ===== PROVIDERS ===== */
-    public get activeUsers() {
+    public static get activeUsers() {
         let keys = CacheManager.keys; // Get user ids
         return keys.map(k => CacheManager.getUser(k)); // Get user objects
     }
 
     /* ===== STACK MANAGEMENT ===== */
-    public addUser(user: User): boolean {
-        //TODO: Notify cacheManager
-        let result = CacheManager.addEntry(user);
+    public static addClient(client: Client): boolean {
+        let result = CacheManager.addEntry(client);
+        console.log(`[SWARM] ${client.email} addition: ${result ? "success" : "error"}`);
         return result;
     }
 
-    public removeUser(user: User): boolean {
-        //TODO: Notify cacheManager
-        let result = CacheManager.removeEntry(user.email);
+    public static removeUser(client: Client): boolean {
+        let result = CacheManager.removeEntry(client.email);
+        console.log(`[SWARM] ${client.email} removal: ${result ? "success" : "error"}`);
         return result;
     }
 }
+
+export default SwarmManager;
