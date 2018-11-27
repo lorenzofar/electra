@@ -4,6 +4,11 @@ import { Server } from "http";
 import * as messages from "./models/messages";
 
 import Validator from "./validator";
+import Dispatcher from "./dispatcher";
+import SwarmManager from "./swarmManager";
+
+import Listener from "models/listener";
+import Client from "models/client";
 
 class Emitter {
     private static io: socket_io.Server = null;
@@ -43,26 +48,52 @@ class Emitter {
         // Get handshake provided by candidate client
         let clientData: messages.socketHandshake = socket.handshake.query;
 
+        console.log(`[EMITTER] received handshake from ${clientData.email}`);
+
         // Check if the client that is trying to connect can do it
         // If not, send an error message and close the connection
 
         Validator.validateHandshake(clientData, (result: boolean) => {
+            console.log(`[EMITTER] validation result for ${clientData.email}: ${result}`);
             if (!result) {
                 socket.send("unathorized").disconnect();
                 return;
             }
             // The client passed the test, it can connect
             // Add it to the swarm
-            console.log(`${clientData.email} is connnected`);
+            console.log(`[EMITTER] ${clientData.email} is connnected / mode: ${clientData.mode}`);
 
             // Add disconnection listener to detect when a client goes offline
             socket.on("disconnect", this.disconnectionHandler.bind(this, socket, clientData.email));
             //TODO: Save client data and bind disconnection handler to him
+
+            if (clientData.mode == "listener") {
+                let newListener: Listener = {
+                    socket: socket,
+                    email: clientData.email,
+                    admin: false
+                }
+                //TODO: Assign admin rights
+                Dispatcher.addListener(newListener);
+            } else {
+                let newClient: Client = {
+                    socket: socket,
+                    email: clientData.email
+                }
+                let additionResult = SwarmManager.addClient(newClient);
+                if(!additionResult) {
+                    // Check if the client has been succesfully added to the swarm
+                    // If not, send an error message and disconnect
+                    socket.send("insertionError").disconnect();
+                    return;                    
+                }
+            }
         });
     }
 
     private static disconnectionHandler(socket: socket_io.Socket, email: string) {
-        console.log(`${email} disconnected`);
+        //TODO: Find a way to know whether the disconnected client is a listener or a provider
+        console.log(`[EMITTER] ${email} disconnected`);
     }
 }
 
