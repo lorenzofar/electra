@@ -1,7 +1,11 @@
 import * as socket_io from "socket.io";
+import * as moment from "moment";
 
 import Cache from "models/cache";
 import Client from "models/client";
+import DataPoint from "models/dataPoint";
+
+const CACHE_LENGTH = 100; // The number of most recent data points to keep
 
 class CacheManager {
     private static _cache: Cache = {};
@@ -44,10 +48,20 @@ class CacheManager {
     }
 
     /* ===== DATA HANDLING ===== */
-    //TODO: Change datatype of parameter
-    public static handleIncomingDataPoint(socket: socket_io.Socket, email: string, dataPoint: any){
+    //FIXME: Change datatype of parameter
+    public static handleIncomingDataPoint(socket: socket_io.Socket, email: string, dataPoint: DataPoint){
         console.log(`[CACHE] received data point from ${email}`);
         console.log(`[CACHE] ${email} says '${dataPoint}'`);
+        // Check if the user exists in the cache
+        if(this.isUserPresent(email)){
+            let len = this._cache[email].data.length; // Get current number of elements
+            if(len > CACHE_LENGTH) this._cache[email].data.shift(); // Remove oldest element id needed
+            dataPoint.timestamp = moment().unix(); // Get current timestamp
+            this._cache[email].data.push(); // Add data point to cache
+        }
+        else{
+            socket.send("usernotfound").disconnect(); // The user is not connected, disconnect the client
+        }
     }
 
     /* ===== UTILITIES ===== */
