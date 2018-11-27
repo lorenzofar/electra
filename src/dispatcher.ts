@@ -33,6 +33,15 @@ class Dispatcher {
         return true;
     }
 
+    public static removeListener(email: string): boolean {
+        if (!this.isListenerPresent(email)) return false;
+        let index = this.listeners.map(l => l.email).indexOf(email);
+        if (index == -1) return false;
+        this.listeners.splice(index, 1);
+        console.log(`[DISPATCHER] removed ${email} as listener`);
+        return true;
+    }
+
     /**
      * Send the cache back to the listener after its connection
      * 
