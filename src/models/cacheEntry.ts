@@ -1,5 +1,4 @@
 import Client from "./client";
-import Listener from "./listener";
 import DataPoint from "./dataPoint";
 
 export default interface cacheEntry{
