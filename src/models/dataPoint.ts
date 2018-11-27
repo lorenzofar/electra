@@ -1,4 +1,4 @@
-export interface sensorsData {
+interface sensorsData {
     [sensor: string]: number;
 }
 
