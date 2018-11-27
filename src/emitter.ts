@@ -65,7 +65,7 @@ class Emitter {
             console.log(`[EMITTER] ${clientData.email} is connnected / mode: ${clientData.mode}`);
 
             // Add disconnection listener to detect when a client goes offline
-            socket.on("disconnect", this.disconnectionHandler.bind(this, socket, clientData.email));
+            socket.on("disconnect", this.disconnectionHandler.bind(this, socket, clientData.email, clientData.mode));
             //TODO: Save client data and bind disconnection handler to him
 
             if (clientData.mode == "listener") {
@@ -101,9 +101,15 @@ class Emitter {
         });
     }
 
-    private static disconnectionHandler(socket: socket_io.Socket, email: string) {
+    private static disconnectionHandler(socket: socket_io.Socket, email: string, mode: "listener" | "provider") {
         //TODO: Find a way to know whether the disconnected client is a listener or a provider
         console.log(`[EMITTER] ${email} disconnected`);
+        if (mode === "listener") {
+            Dispatcher.removeListener(email);
+        }
+        else {
+            SwarmManager.removeClient(email);
+        }
     }
 }
 
