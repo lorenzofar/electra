@@ -10,6 +10,12 @@ const CACHE_LENGTH = 100; // The number of most recent data points to keep
 class CacheManager {
     private static _cache: Cache = {};
 
+    public static initialize(){
+        this.isUserPresent = this.isUserPresent.bind(this);
+        this.handleIncomingDataPoint = this.handleIncomingDataPoint.bind(this);
+    }
+
+
     /* ===== CACHE MANAGEMENT ===== */
     public static addEntry(user: Client): boolean {
 
@@ -75,5 +81,7 @@ class CacheManager {
     }
 
 }
+
+CacheManager.initialize();
 
 export default CacheManager;
