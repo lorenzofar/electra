@@ -4,6 +4,8 @@
   "description": "Real time manager for Electra",
   "main": "server.js",
   "scripts": {
+    "start": "npm run build && node dist/server.js",
+    "build": "tsc",
     "dev": "ts-node ./src/server.ts"
   },
   "author": "Lorenzo Farinelli",
