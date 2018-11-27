@@ -28,8 +28,11 @@ class Validator {
         tempCheckHolder = CacheManager.isUserPresent(email); // Check if the client associated to the email is already connected
         if (tempCheckHolder) callback(false); // The user is already connected
 
+        //FIXME: Use temporary override until APIs are available
+        callback(true);
+
         // try to login 
-        //TODO: APIs are still to be defined, change with definitive versionregexResult
+        /*
         request
             .get(`${constants.BASE_URL}/login`, (err, response, body) => {
                 if (err) { // An error occurred performing the request
@@ -37,12 +40,10 @@ class Validator {
                     callback(false);
                 }
                 else { // All's well that ends well
-                    console.log(response.statusCode);
-                    console.log(body);
                     callback(true);
                 };
             });
-        callback(true);
+        */
     }
 }
 
