@@ -20,6 +20,7 @@ class CacheManager {
     public static removeEntry(email: string): boolean {
         if (!(this.isUserPresent(email))) return false;
         delete this._cache[email];
+        console.log(`[CACHE] remove entry for ${email}`);
         return true;
     }
 
