@@ -15,9 +15,9 @@ class SwarmManager {
         return result;
     }
 
-    public static removeUser(client: Client): boolean {
-        let result = CacheManager.removeEntry(client.email);
-        console.log(`[SWARM] ${client.email} removal: ${result ? "success" : "error"}`);
+    public static removeClient(email: string): boolean {
+        let result = CacheManager.removeEntry(email);
+        console.log(`[SWARM] ${email} removal: ${result ? "success" : "error"}`);
         return result;
     }
 }
