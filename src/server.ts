@@ -9,25 +9,27 @@ import Emitter from "./emitter";
 const { PORT = 3000 } = process.env; // Get custom port oof fall back to 3000
 
 const dolphin =
-`                                                          __
-                              .__                         / |
-                             /  /                         |  \
-                            /   |                     _-------'_
-                       ____/     \_________      __--"      _/  \_
-         _______------"                    "----"          _-\___/
-     _--"                                               _-"
- ___<___                                          ___--"
-(-------0                                   __---"
- '--___                                    /
-       "--___\                _______-----"
-             \\    (____-----"
-              \\    \_
-               '.'..__\ `
+    `
+                                   __
+                               _.-~  )
+                    _..--~~~~,'   ,-/     _
+                 .-'. . . .'   ,-','    ,' )
+               ,'. . . _   ,--~,-'__..-'  ,'
+             ,'. . .  (@)' ---~~~~      ,'
+            /. . . . '~~             ,-'
+           /. . . . .             ,-'
+          ; . . . .  - .        ,'
+         : . . . .       _     /
+        . . . . .          '-.:
+       . . . ./  - .          )
+      .  . . |  _____..---.._/ _____
+~---~~~~----~~~~             ~~
+`
 
 /* ===== SERVER INITIALIZATION ===== */
 const server = http.createServer((req, res) => {
     res.writeHead(200);
-    res.end("server up");
+    res.end("The mighty dolphin waves at you");
 })
 server.listen(PORT, () => {
     console.log(figlet.textSync('ELECTRA'));
