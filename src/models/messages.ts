@@ -9,7 +9,7 @@
   * mode property is used to determine whether a client is providing or listening to data
   */
  export interface socketHandshake extends SocketIO.Handshake{
-    email: string;
+    username: string;
     password: string;
     mode: "provider" | "listener";
  }

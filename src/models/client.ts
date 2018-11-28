@@ -1,4 +1,4 @@
 export default interface Client{
-    email: string;
+    username: string;
     socket: SocketIO.Socket;
 }

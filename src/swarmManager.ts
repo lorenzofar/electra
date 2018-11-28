@@ -11,13 +11,13 @@ class SwarmManager {
     /* ===== STACK MANAGEMENT ===== */
     public static addClient(client: Client): boolean {
         let result = CacheManager.addEntry(client);
-        console.log(`[SWARM] ${client.email} addition: ${result ? "success" : "error"}`);
+        console.log(`[SWARM] ${client.username} addition: ${result ? "success" : "error"}`);
         return result;
     }
 
-    public static removeClient(email: string): boolean {
-        let result = CacheManager.removeEntry(email);
-        console.log(`[SWARM] ${email} removal: ${result ? "success" : "error"}`);
+    public static removeClient(username: string): boolean {
+        let result = CacheManager.removeEntry(username);
+        console.log(`[SWARM] ${username} removal: ${result ? "success" : "error"}`);
         return result;
     }
 }

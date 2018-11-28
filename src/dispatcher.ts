@@ -21,24 +21,24 @@ class Dispatcher {
      */
     public static addListener(listener: Listener): boolean {
         // Check if the listener has already registered
-        if (this.isListenerPresent(listener.email)) {
-            console.log(`[DISPATCHER] rejected ${listener.email} as listener`);
+        if (this.isListenerPresent(listener.username)) {
+            console.log(`[DISPATCHER] rejected ${listener.username} as listener`);
             return false;
         }
 
-        console.log(`[DISPATCHER] adding ${listener.email} as listener`);
+        console.log(`[DISPATCHER] adding ${listener.username} as listener`);
         this.listeners.push(listener);
         this.sendWelcomeData(listener);
 
         return true;
     }
 
-    public static removeListener(email: string): boolean {
-        if (!this.isListenerPresent(email)) return false;
-        let index = this.listeners.map(l => l.email).indexOf(email);
+    public static removeListener(username: string): boolean {
+        if (!this.isListenerPresent(username)) return false;
+        let index = this.listeners.map(l => l.username).indexOf(username);
         if (index == -1) return false;
         this.listeners.splice(index, 1);
-        console.log(`[DISPATCHER] removed ${email} as listener`);
+        console.log(`[DISPATCHER] removed ${username} as listener`);
         return true;
     }
 
@@ -47,7 +47,7 @@ class Dispatcher {
      * 
      */
     private static async sendWelcomeData(listener: Listener) {
-        console.log(`[DISPATCHER] sending initial data to ${listener.email}`);
+        console.log(`[DISPATCHER] sending initial data to ${listener.username}`);
         //TODO: Check if the listener is an admin or a user and get data accordingly
         //TODO: Ask cachemanager for data and send back
         let data = null;
@@ -56,10 +56,10 @@ class Dispatcher {
 
     /**
      * Check if the listener has already connected
-     * @param email email address of listener
+     * @param username username of listener
      */
-    private static isListenerPresent(email: string) {
-        let index = this.listeners.map(l => l.email).indexOf(email);
+    private static isListenerPresent(username: string) {
+        let index = this.listeners.map(l => l.username).indexOf(username);
         return index != -1;
     }
 }

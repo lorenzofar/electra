@@ -19,18 +19,18 @@ class CacheManager {
     /* ===== CACHE MANAGEMENT ===== */
     public static addEntry(user: Client): boolean {
 
-        if (this.isUserPresent(user.email)) return false;
-        this._cache[user.email] = {
+        if (this.isUserPresent(user.username)) return false;
+        this._cache[user.username] = {
             user: user,
             data: []
         };
         return true;
     }
 
-    public static removeEntry(email: string): boolean {
-        if (!(this.isUserPresent(email))) return false;
-        delete this._cache[email];
-        console.log(`[CACHE] remove entry for ${email}`);
+    public static removeEntry(username: string): boolean {
+        if (!(this.isUserPresent(username))) return false;
+        delete this._cache[username];
+        console.log(`[CACHE] remove entry for ${username}`);
         return true;
     }
 
@@ -55,15 +55,15 @@ class CacheManager {
 
     /* ===== DATA HANDLING ===== */
     //FIXME: Change datatype of parameter
-    public static handleIncomingDataPoint(socket: socket_io.Socket, email: string, dataPoint: DataPoint){
-        console.log(`[CACHE] received data point from ${email}`);
-        console.log(`[CACHE] ${email} says '${dataPoint}'`);
+    public static handleIncomingDataPoint(socket: socket_io.Socket, username: string, dataPoint: DataPoint){
+        console.log(`[CACHE] received data point from ${username}`);
+        console.log(`[CACHE] ${username} says '${dataPoint}'`);
         // Check if the user exists in the cache
-        if(this.isUserPresent(email)){
-            let len = this._cache[email].data.length; // Get current number of elements
-            if(len > CACHE_LENGTH) this._cache[email].data.shift(); // Remove oldest element id needed
+        if(this.isUserPresent(username)){
+            let len = this._cache[username].data.length; // Get current number of elements
+            if(len > CACHE_LENGTH) this._cache[username].data.shift(); // Remove oldest element id needed
             dataPoint.timestamp = moment().unix(); // Get current timestamp
-            this._cache[email].data.push(); // Add data point to cache
+            this._cache[username].data.push(); // Add data point to cache
         }
         else{
             socket.send("usernotfound").disconnect(); // The user is not connected, disconnect the client

@@ -9,8 +9,8 @@ class Validator {
         /**
          * This method checks if a user can connect to the server or not.
          * It checks:
-         *      - whther the email is valid (RegEx)
-         *      - whether the email is already connected
+         *      - whther the username is valid (RegEx)
+         *      - whether the username is already connected
          *      - if the password is not empty
          *      - If the credentials are correct
          * If all the above tests are succesfull, the method returns true,
@@ -22,16 +22,16 @@ class Validator {
             return;
         }
 
-        let email = handshake.email; // Get provided email
-        let tempCheckHolder = email && constants.MAILADDR_REGEX.test(email); // Test email against regex
+        let username = handshake.username; // Get provided username
+        let tempCheckHolder = username != null; // && constants.MAILADDR_REGEX.test(username); // Test username against regex
         if (!tempCheckHolder) {
-            callback(false); // If the provided email is not valid, stop
+            callback(false); // If the provided username is not valid, stop
             return;
         }
 
-        // Check if the email is already connected
+        // Check if the username is already connected
 
-        tempCheckHolder = CacheManager.isUserPresent(email); // Check if the client associated to the email is already connected
+        tempCheckHolder = CacheManager.isUserPresent(username); // Check if the client associated to the username is already connected
         if (tempCheckHolder) {
             callback(false); // The user is already connected
             return;

@@ -33,45 +33,45 @@ class Emitter {
          * if another client with the same identity exists
          * 
          * ===== WORKFLOW =====
-         * - The method receives, during handshake, the email and password associated to an account
+         * - The method receives, during handshake, the username and password associated to an account
          * - It first validates the data:
-         *      - check if is a valid email
-         *      - check if the email has already been used
+         *      - check if is a valid username
+         *      - check if the username has already been used
          *      - check if the password is not empty
          * - Then tries to log the user in with the provided credentials
          * - If the login is succesful, add a new entry in the cache
          * 
          * ===== NOTES =====
-         * The client sends just the email and password of the user hence, if we 
+         * The client sends just the username and password of the user hence, if we 
          * would like to know its name, we should query the server to return its data.
          */
 
         // Get handshake provided by candidate client
         let clientData: messages.socketHandshake = socket.handshake.query;
 
-        console.log(`[EMITTER] received handshake from ${clientData.email}`);
+        console.log(`[EMITTER] received handshake from ${clientData.username}`);
 
         // Check if the client that is trying to connect can do it
         // If not, send an error message and close the connection
 
         Validator.validateHandshake(clientData, (result: boolean) => {
-            console.log(`[EMITTER] validation result for ${clientData.email}: ${result}`);
+            console.log(`[EMITTER] validation result for ${clientData.username}: ${result}`);
             if (!result) {
                 socket.send("unathorized").disconnect();
                 return;
             }
             // The client passed the test, it can connect
             // Add it to the swarm
-            console.log(`[EMITTER] ${clientData.email} is connnected / mode: ${clientData.mode}`);
+            console.log(`[EMITTER] ${clientData.username} is connnected / mode: ${clientData.mode}`);
 
             // Add disconnection listener to detect when a client goes offline
-            socket.on("disconnect", this.disconnectionHandler.bind(this, socket, clientData.email, clientData.mode));
+            socket.on("disconnect", this.disconnectionHandler.bind(this, socket, clientData.username, clientData.mode));
             //TODO: Save client data and bind disconnection handler to him
 
             if (clientData.mode == "listener") {
                 let newListener: Listener = {
                     socket: socket,
-                    email: clientData.email,
+                    username: clientData.username,
                     admin: false
                 }
                 //TODO: Assign admin rights
@@ -83,7 +83,7 @@ class Emitter {
             } else {
                 let newClient: Client = {
                     socket: socket,
-                    email: clientData.email
+                    username: clientData.username
                 }
                 let additionResult = SwarmManager.addClient(newClient);
                 if (!additionResult) {
@@ -95,20 +95,20 @@ class Emitter {
                 // Add listener for data point events
                 // Bind method to client information
                 socket.on("data",
-                    CacheManager.handleIncomingDataPoint.bind(this, socket, clientData.email)
+                    CacheManager.handleIncomingDataPoint.bind(this, socket, clientData.username)
                 );
             }
         });
     }
 
-    private static disconnectionHandler(socket: socket_io.Socket, email: string, mode: "listener" | "provider") {
+    private static disconnectionHandler(socket: socket_io.Socket, username: string, mode: "listener" | "provider") {
         //TODO: Find a way to know whether the disconnected client is a listener or a provider
-        console.log(`[EMITTER] ${email} disconnected`);
+        console.log(`[EMITTER] ${username} disconnected`);
         if (mode === "listener") {
-            Dispatcher.removeListener(email);
+            Dispatcher.removeListener(username);
         }
         else {
-            SwarmManager.removeClient(email);
+            SwarmManager.removeClient(username);
         }
     }
 }
