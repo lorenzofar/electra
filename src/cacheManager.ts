@@ -7,10 +7,15 @@ import DataPoint from "models/dataPoint";
 
 const CACHE_LENGTH = 100; // The number of most recent data points to keep
 
+interface parsedCacheEntry {
+    username: string;
+    data: DataPoint[];
+}
+
 class CacheManager {
     private static _cache: Cache = {};
 
-    public static initialize(){
+    public static initialize() {
         this.isUserPresent = this.isUserPresent.bind(this);
         this.handleIncomingDataPoint = this.handleIncomingDataPoint.bind(this);
     }
@@ -39,8 +44,19 @@ class CacheManager {
         return Object.keys(this._cache);
     }
 
-    public static get users(): Client[]{
+    public static get users(): Client[] {
         return Object.keys(this._cache).map(k => this._cache[k].user);
+    }
+
+    public static get parsedCache(): parsedCacheEntry[] {
+        // Only return usernames and data arrays
+        let parsedCache: parsedCacheEntry[] = Object.keys(this._cache).map(k => {
+            return {
+                username: k,
+                data: this._cache[k].data
+            };
+        });
+        return parsedCache;
     }
 
     public static getUser(key: string) {
@@ -55,17 +71,18 @@ class CacheManager {
 
     /* ===== DATA HANDLING ===== */
     //FIXME: Change datatype of parameter
-    public static handleIncomingDataPoint(socket: socket_io.Socket, username: string, dataPoint: DataPoint){
+    public static handleIncomingDataPoint(socket: socket_io.Socket, username: string, dataPoint: DataPoint) {
         console.log(`[CACHE] received data point from ${username}`);
         console.log(`[CACHE] ${username} says '${dataPoint}'`);
         // Check if the user exists in the cache
-        if(this.isUserPresent(username)){
+        if (this.isUserPresent(username)) {
             let len = this._cache[username].data.length; // Get current number of elements
-            if(len > CACHE_LENGTH) this._cache[username].data.shift(); // Remove oldest element id needed
+            if (len > CACHE_LENGTH) this._cache[username].data.shift(); // Remove oldest element id needed
             dataPoint.timestamp = moment().unix(); // Get current timestamp
-            this._cache[username].data.push(); // Add data point to cache
+            this._cache[username].data.push(dataPoint); // Add data point to cache
+
         }
-        else{
+        else {
             socket.send("usernotfound").disconnect(); // The user is not connected, disconnect the client
         }
     }
