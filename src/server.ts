@@ -32,7 +32,7 @@ const serve = serveStatic("public", { "index": ["index.html"] });
 
 /* ===== SERVER INITIALIZATION ===== */
 const server = http.createServer((req: any, res: any) => {
-    serve(req, res, null);
+    serve(req, res, () => null);
 })
 
 server.listen(PORT, () => {
