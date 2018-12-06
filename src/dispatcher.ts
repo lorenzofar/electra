@@ -1,4 +1,5 @@
 import Listener from "models/listener";
+import CacheManager from "./cacheManager";
 
 
 /**
@@ -46,12 +47,11 @@ class Dispatcher {
      * Send the cache back to the listener after its connection
      * 
      */
-    private static async sendWelcomeData(listener: Listener) {
+    private static sendWelcomeData(listener: Listener) {
         console.log(`[DISPATCHER] sending initial data to ${listener.username}`);
         //TODO: Check if the listener is an admin or a user and get data accordingly
-        //TODO: Ask cachemanager for data and send back
-        let data = null;
-        listener.socket.emit("welcome", data);
+        let data = CacheManager.parsedCache; // Get data from cache manager
+        listener.socket.emit("welcome", data); // Send those data back to the connected user
     }
 
     /**
