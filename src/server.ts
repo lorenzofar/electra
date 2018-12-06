@@ -3,6 +3,8 @@ require("dotenv").config();
 import * as http from "http";
 import * as figlet from "figlet";
 
+import * as serveStatic from "serve-static";
+
 /* ===== CUSTOM MODULES ===== */
 import Emitter from "./emitter";
 
@@ -25,12 +27,14 @@ const dolphin =
       .  . . |  _____..---.._/ _____
 ~---~~~~----~~~~             ~~
 `
+/* ===== SERVE FILES ===== */
+const serve = serveStatic("public", { "index": ["index.html"] });
 
 /* ===== SERVER INITIALIZATION ===== */
-const server = http.createServer((req, res) => {
-    res.writeHead(200);
-    res.end("The mighty dolphin waves at you");
+const server = http.createServer((req: any, res: any) => {
+    serve(req, res, null);
 })
+
 server.listen(PORT, () => {
     console.log(figlet.textSync('ELECTRA'));
     console.log(dolphin);

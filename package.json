@@ -17,7 +17,11 @@
     "figlet": "^1.2.1",
     "moment": "^2.22.2",
     "request": "^2.88.0",
+    "serve-static": "^1.13.2",
     "socket.io": "^2.1.1",
     "typescript": "^3.1.6"
+  },
+  "devDependencies": {
+    "@types/serve-static": "^1.13.2"
   }
 }
