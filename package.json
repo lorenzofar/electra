@@ -11,17 +11,35 @@
   "author": "Lorenzo Farinelli",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.2.0",
     "@types/request": "^2.48.1",
     "@types/socket.io": "^2.1.0",
+    "babel": "^6.23.0",
+    "cookie-parser": "^1.4.3",
+    "css-loader": "^2.0.0",
     "dotenv": "^6.1.0",
+    "express": "^4.16.4",
     "figlet": "^1.2.1",
     "moment": "^2.22.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "request": "^2.88.0",
     "serve-static": "^1.13.2",
     "socket.io": "^2.1.1",
-    "typescript": "^3.1.6"
+    "style-loader": "^0.23.1",
+    "typescript": "^3.1.6",
+    "webpack": "^4.27.1"
   },
   "devDependencies": {
-    "@types/serve-static": "^1.13.2"
+    "@types/express": "^4.16.0",
+    "@types/react": "^16.7.13",
+    "@types/react-dom": "^16.0.11",
+    "@types/serve-static": "^1.13.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "source-map-loader": "^0.2.4"
   }
 }

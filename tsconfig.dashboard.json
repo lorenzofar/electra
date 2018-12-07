@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "pretty": true,
+        "sourceMap": true,
+        "target": "es6",
+        "outDir": "./public",
+        "baseUrl": "./dashboard",
+        "jsx": "react",
+        "allowJs": true
+    },
+    "include": [
+        "dashboard/**/*.ts",
+        "dashboard/**/**/*.ts"
+    ],
+
+    "exclude": [
+        "node_modules"
+    ]
+}

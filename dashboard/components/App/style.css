@@ -1,0 +1,24 @@
+#app{
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    grid-template-areas: "header" "main" "statusbar";
+    grid-template-rows: 48pt 1fr 24pt;
+    grid-template-columns: 1fr;
+}
+
+#header{
+    grid-area: header;
+    background-color: yellow;
+}
+
+#main-container{
+    grid-area: main;
+    background-color: red;
+}
+
+#status-bar{
+    grid-area: statusbar;
+    background-color: blue;
+}
