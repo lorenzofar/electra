@@ -1,5 +1,8 @@
 /* ===== EXTERNAL MODULES ===== */
 require("dotenv").config();
+import * as express from "express";
+import * as cookieParser from "cookie-parser";
+
 import * as http from "http";
 import * as figlet from "figlet";
 
@@ -31,9 +34,21 @@ const dolphin =
 const serve = serveStatic("public", { "index": ["index.html"] });
 
 /* ===== SERVER INITIALIZATION ===== */
-const server = http.createServer((req: any, res: any) => {
-    serve(req, res, () => null);
-})
+var app: express.Application = express();
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.static("./public"));
+
+var router = express.Router();
+router.get("/", (req: express.Request, res: express.Response) => {
+    res.render("index");
+});
+
+app.use("/", router);
+
+
+const server = http.createServer(app);
 
 server.listen(PORT, () => {
     console.log(figlet.textSync('ELECTRA'));
