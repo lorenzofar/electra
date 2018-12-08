@@ -2,14 +2,14 @@
 require("dotenv").config();
 import * as express from "express";
 import * as cookieParser from "cookie-parser";
+import * as path from "path";
 
 import * as http from "http";
 import * as figlet from "figlet";
 
-import * as serveStatic from "serve-static";
-
 /* ===== CUSTOM MODULES ===== */
 import Emitter from "./emitter";
+import TokenHelper from "./tokenHelper";
 
 const { PORT = 3000 } = process.env; // Get custom port oof fall back to 3000
 
@@ -31,22 +31,64 @@ const dolphin =
 ~---~~~~----~~~~             ~~
 `
 /* ===== SERVE FILES ===== */
-const serve = serveStatic("public", { "index": ["index.html"] });
 
 /* ===== SERVER INITIALIZATION ===== */
 var app: express.Application = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static("./public"));
+app.set("view engine", "pug");
+app.use(express.static(path.join(__dirname, 'public')));
 
 var router = express.Router();
 router.get("/", (req: express.Request, res: express.Response) => {
-    res.render("index");
+    //TODO: Check cookies
+    let token = req.cookies && req.cookies.token;
+
+    if (token) {
+        // The token exists
+        // Check if it is valid
+        // If not, remove it
+        TokenHelper.parseToken(token, (decoded) => {
+            if (decoded != null) {
+                // The token is valid
+                if (decoded.admin) { // Check if the user is an admin
+                    //FIXME: Also handle the case where the user is not an admin
+                    res.render("index");
+                }
+                else {
+                    res.render("error");
+                }
+            }
+            else {
+                // TODO: Nella pagina di errore mettere anche un pulsante per fare il login
+                res.clearCookie("test");
+                res.render("error");
+            }
+        });
+    }
+    else {
+        res.render("login");
+    }
+});
+
+//TODO: Add something to let the user log and retrieve the token
+router.get("/credentials", (req: express.Request, res: express.Response) => {
+    //TODO: Parse token and return credentials
+    console.log(req.cookies);
+    let token = req.cookies && req.cookies.token;
+    //TODO: Handle null cookies
+    TokenHelper.parseToken(token, (credentials) => {
+        console.log("I received credentials");
+        if (credentials == null) {
+            res.clearCookie("token");
+            res.redirect("/error");
+        }
+        else res.status(200).send(credentials);
+    })
 });
 
 app.use("/", router);
-
 
 const server = http.createServer(app);
 
