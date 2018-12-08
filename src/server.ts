@@ -9,7 +9,8 @@ import * as figlet from "figlet";
 
 /* ===== CUSTOM MODULES ===== */
 import Emitter from "./emitter";
-import TokenHelper from "./tokenHelper";
+import { TokenData, TokenHelper } from "./tokenHelper";
+import Validator from "./validator";
 
 const { PORT = 3000 } = process.env; // Get custom port oof fall back to 3000
 
@@ -38,7 +39,7 @@ var app: express.Application = express();
 app.use(express.json());
 app.use(cookieParser());
 app.set("view engine", "pug");
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('./public'));
 
 var router = express.Router();
 router.get("/", (req: express.Request, res: express.Response) => {
@@ -70,6 +71,37 @@ router.get("/", (req: express.Request, res: express.Response) => {
     else {
         res.render("login");
     }
+});
+
+router.get("/login", (req: express.Request, res: express.Response) => {
+    console.log(req.query);
+    if (!req.query) return res.status(400).end();
+    let username = req.query.username;
+    let password = req.query.password;
+    if (!username || !password) return res.status(400).end();
+
+    console.log(`[SERVER] ${username} is trying to load the dashboard`);
+
+    //FIXME: TODO: Perform a login with NECST APIs
+    let loginResult: boolean = true;
+
+    if (!loginResult) return res.status(403).end();
+
+    // Retrieve role
+
+    //Sign token
+    let tokenData: TokenData = {
+        username: username, 
+        password: password,
+        admin: true //FIXME:
+    }
+    let token = TokenHelper.signToken(tokenData);
+    res.cookie("token", token);
+
+    console.log(`[SERVER] dashboard access granted to ${username}`);
+    console.log(`[SERVER] signed token ${token}`);
+
+    res.status(200).redirect("/");
 });
 
 //TODO: Add something to let the user log and retrieve the token
