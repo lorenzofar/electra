@@ -4,7 +4,7 @@ import * as moment from "moment";
 const SEED_MAX = 10000;
 const SEED_MIN = 500;
 
-interface TokenData {
+export interface TokenData {
     username: string;
     password: string;
     admin: boolean;
@@ -14,7 +14,7 @@ interface TokenDataaScrambled extends TokenData{
     seed: number; // random value to scramble encryption
 }
 
-class TokenHelper {
+export class TokenHelper {
     private static get secret() {
         let { JWT_SECRET = "" } = process.env;
         return JWT_SECRET;
@@ -23,7 +23,12 @@ class TokenHelper {
     public static signToken(data: TokenData): string {
         //TODO: Add an expiration date if needed
         if (data == null) return null;
-        let scrambled: TokenDataaScrambled = null;
+        let scrambled: TokenDataaScrambled = {
+            admin: false,
+            username: "",
+            password: "",
+            seed: null
+        };
         Object.assign(scrambled, data);
         scrambled.seed = this.seed;
         console.log(scrambled.seed);
@@ -48,5 +53,3 @@ class TokenHelper {
         return rand + timestamp;
     }
 }
-
-export default TokenHelper;
