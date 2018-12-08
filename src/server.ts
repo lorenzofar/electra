@@ -74,7 +74,6 @@ router.get("/", (req: express.Request, res: express.Response) => {
 });
 
 router.get("/login", (req: express.Request, res: express.Response) => {
-    console.log(req.query);
     if (!req.query) return res.status(400).end();
     let username = req.query.username;
     let password = req.query.password;
@@ -99,7 +98,6 @@ router.get("/login", (req: express.Request, res: express.Response) => {
     res.cookie("token", token);
 
     console.log(`[SERVER] dashboard access granted to ${username}`);
-    console.log(`[SERVER] signed token ${token}`);
 
     res.redirect("../");
 });
@@ -111,12 +109,9 @@ router.get("/logout", (req: express.Request, res: express.Response) => {
 
 //TODO: Add something to let the user log and retrieve the token
 router.get("/credentials", (req: express.Request, res: express.Response) => {
-    //TODO: Parse token and return credentials
-    console.log(req.cookies);
     let token = req.cookies && req.cookies.token;
     //TODO: Handle null cookies
     TokenHelper.parseToken(token, (credentials) => {
-        console.log("I received credentials");
         if (credentials == null) {
             res.clearCookie("token");
             res.redirect("/error");

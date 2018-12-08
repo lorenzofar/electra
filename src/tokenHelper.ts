@@ -31,16 +31,13 @@ export class TokenHelper {
         };
         Object.assign(scrambled, data);
         scrambled.seed = this.seed;
-        console.log(scrambled.seed);
         let token = jwt.sign(scrambled, this.secret);
-        console.log(token);
         return token;
     }
 
     public static parseToken(token: string, callback: (data: TokenData) => void) {
 
         jwt.verify(token, this.secret, (err, decoded: TokenData) => {
-            console.log(decoded);
             if(err) return callback(null);
             callback(decoded);
         })
