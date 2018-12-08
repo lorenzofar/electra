@@ -29,6 +29,7 @@
     "request": "^2.88.0",
     "serve-static": "^1.13.2",
     "socket.io": "^2.1.1",
+    "socketio-wildcard": "^2.0.0",
     "style-loader": "^0.23.1",
     "typescript": "^3.1.6",
     "webpack": "^4.27.1"
