@@ -104,6 +104,11 @@ router.get("/login", (req: express.Request, res: express.Response) => {
     res.status(200).redirect("/");
 });
 
+router.get("/logout", (req: express.Request, res: express.Response) => {
+    res.clearCookie("token");
+    res.render("logout");
+});
+
 //TODO: Add something to let the user log and retrieve the token
 router.get("/credentials", (req: express.Request, res: express.Response) => {
     //TODO: Parse token and return credentials
