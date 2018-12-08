@@ -7,10 +7,10 @@ const SEED_MIN = 500;
 export interface TokenData {
     username: string;
     password: string;
-    admin: boolean;
+    admin?: boolean;
 }
 
-interface TokenDataaScrambled extends TokenData{
+interface TokenDataScrambled extends TokenData{
     seed: number; // random value to scramble encryption
 }
 
@@ -23,7 +23,7 @@ export class TokenHelper {
     public static signToken(data: TokenData): string {
         //TODO: Add an expiration date if needed
         if (data == null) return null;
-        let scrambled: TokenDataaScrambled = {
+        let scrambled: TokenDataScrambled = {
             admin: false,
             username: "",
             password: "",
@@ -37,8 +37,9 @@ export class TokenHelper {
 
     public static parseToken(token: string, callback: (data: TokenData) => void) {
 
-        jwt.verify(token, this.secret, (err, decoded: TokenData) => {
+        jwt.verify(token, this.secret, (err, decoded: TokenDataScrambled) => {
             if(err) return callback(null);
+            delete decoded.seed;
             callback(decoded);
         })
     }
