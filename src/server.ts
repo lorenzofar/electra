@@ -101,7 +101,7 @@ router.get("/login", (req: express.Request, res: express.Response) => {
     console.log(`[SERVER] dashboard access granted to ${username}`);
     console.log(`[SERVER] signed token ${token}`);
 
-    res.status(200).redirect("/");
+    res.redirect("../");
 });
 
 router.get("/logout", (req: express.Request, res: express.Response) => {
