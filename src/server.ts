@@ -2,6 +2,7 @@
 require("dotenv").config();
 import * as express from "express";
 import * as cookieParser from "cookie-parser";
+const cookieSession = require("cookie-session");
 import * as path from "path";
 
 import * as http from "http";
@@ -38,13 +39,18 @@ var app: express.Application = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(cookieSession({
+    name: "session",
+    keys: [process.env.COOKIE_SECRET]
+}));
+
 app.set("view engine", "pug");
 app.use(express.static('./public'));
 
 var router = express.Router();
 router.get("/", (req: express.Request, res: express.Response) => {
-    //TODO: Check cookies
-    let token = req.cookies && req.cookies.token;
+    let token = req.session && req.session.token;
 
     if (token) {
         // The token exists
@@ -90,35 +96,40 @@ router.get("/login", (req: express.Request, res: express.Response) => {
 
     //Sign token
     let tokenData: TokenData = {
-        username: username, 
+        username: username,
         password: password,
         admin: true //FIXME:
     }
     let token = TokenHelper.signToken(tokenData);
-    res.cookie("token", token);
 
     console.log(`[SERVER] dashboard access granted to ${username}`);
-
+    
+    req.session.token = token;
     res.redirect("../");
 });
 
 router.get("/logout", (req: express.Request, res: express.Response) => {
-    res.clearCookie("token");
+    console.log("[SERVER] logging out");
+    req.session.token = null;
     res.render("logout");
 });
 
 //TODO: Add something to let the user log and retrieve the token
 router.get("/credentials", (req: express.Request, res: express.Response) => {
-    let token = req.cookies && req.cookies.token;
+    let token = req.session && req.session.token;
     //TODO: Handle null cookies
     TokenHelper.parseToken(token, (credentials) => {
         if (credentials == null) {
             res.clearCookie("token");
-            res.redirect("/error");
+            res.redirect("../error");
         }
         else res.status(200).send(credentials);
     })
 });
+
+router.get("/error", (req: express.Request, res: express.Response) => {
+    res.render("error");
+})
 
 app.use("/", router);
 
