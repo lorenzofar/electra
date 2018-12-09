@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "npm run build && node dist/server.js",
-    "build": "tsc",
+    "build": "tsc && webpack",
     "dev": "ts-node ./src/server.ts"
   },
   "author": "Lorenzo Farinelli",
@@ -47,6 +47,7 @@
     "babel-loader": "^8.0.4",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "source-map-loader": "^0.2.4"
+    "source-map-loader": "^0.2.4",
+    "webpack-cli": "^3.1.2"
   }
 }
