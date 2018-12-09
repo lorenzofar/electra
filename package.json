@@ -4,9 +4,10 @@
   "description": "Real time manager for Electra",
   "main": "server.js",
   "scripts": {
-    "start": "npm run build && node dist/server.js",
-    "build": "tsc && webpack",
-    "dev": "ts-node ./src/server.ts"
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "dev": "ts-node ./src/server.ts",
+    "heroku-postbuild": "webpack -p && tsc"
   },
   "author": "Lorenzo Farinelli",
   "license": "ISC",
