@@ -111,6 +111,11 @@ class Emitter {
             SwarmManager.removeClient(username);
         }
     }
+
+    public static emit(event: string, data: any){
+        if(!event || !data) return;
+        this.io.emit(event, data);
+    }
 }
 
 Emitter.initialize();
