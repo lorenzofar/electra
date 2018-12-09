@@ -11,7 +11,7 @@ class SocketManager {
 
     private static subscriptionMap: SubscriptionMap = {};
 
-    constructor(username: string, password: string){
+    constructor(username: string, password: string, connectedCallback: (connected: Boolean) => void){
         // Check provided data
         if(!username || !password) return;
               
@@ -21,7 +21,11 @@ class SocketManager {
 
         this.socket.on("connect", () => {
             console.log("Connected to server");
+            this.socket.on("disconnect", () => {
+                connectedCallback(false);
+            })
             this.socket.on("*", this.handleSocketEvent);
+            connectedCallback(true);
         })
     }
 
