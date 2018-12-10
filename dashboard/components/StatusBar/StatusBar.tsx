@@ -2,27 +2,27 @@ import * as React from "react";
 
 import "./style.css";
 
-interface StatusBarState{       
+interface StatusBarState {
     connectedUsers: number; // Total number of connected users (monitored)
-
 }
 
-interface StatusBarProps{
-    id: string;
+interface StatusBarProps {
     connected: boolean;
 }
 
 export class StatusBar extends React.Component<StatusBarProps, StatusBarState>{
 
-    constructor(props: StatusBarProps){
+    constructor(props: StatusBarProps) {
         super(props);
     }
-    
-    render(){
+
+    render() {
         console.log(this.props.connected);
-        return(
-            <div id={this.props.id}>
-                {this.props.connected ? "Connected to server" : "Not connected to server"}
+        return (
+            <div id="status-bar">
+                <span>
+                    {this.props.connected ? "Connected to server" : "Not connected to server"}
+                </span>
             </div>
         )
     }
