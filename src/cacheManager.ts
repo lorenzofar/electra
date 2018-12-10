@@ -1,9 +1,11 @@
 import * as socket_io from "socket.io";
 import * as moment from "moment";
 
-import Cache from "models/cache";
-import Client from "models/client";
-import DataPoint from "models/dataPoint";
+import Cache from "./models/cache";
+import Client from "./models/client";
+import DataPoint from "./models/dataPoint";
+import Dispatcher from "./dispatcher";
+import Emitter from "./emitter";
 
 const CACHE_LENGTH = 100; // The number of most recent data points to keep
 
@@ -80,6 +82,11 @@ class CacheManager {
             if (len > CACHE_LENGTH) this._cache[username].data.shift(); // Remove oldest element id needed
             dataPoint.timestamp = moment().unix(); // Get current timestamp
             this._cache[username].data.push(dataPoint); // Add data point to cache
+            let dispatchedPoint = {
+                username: username,
+                data: dataPoint
+            };
+            Emitter.emit("datapoint", dispatchedPoint); // Send data point to listeners
 
         }
         else {
