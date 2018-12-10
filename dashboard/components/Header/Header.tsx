@@ -15,7 +15,7 @@ export class Header extends React.Component<HeaderProps, {}>{
                 <div id="userinfo">
                     <span>{this.props.username}</span>
                     <a href="/logout">
-                        <div>LOGOUT</div>
+                        <div id="logout-btn"/>
                     </a>
                 </div>
             </div>

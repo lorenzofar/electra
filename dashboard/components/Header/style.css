@@ -9,10 +9,20 @@
 #header > #logo{
     grid-area: logo;
     font-weight: bold;
+    align-self: center;
 }
 
 #header > #userinfo{
     display: inline-flex;
     flex-direction: row;
     grid-area: userinfo;
+    align-items: center;
+}
+
+#logout-btn{
+    border-radius: 50%;
+    background-color: var(--accent);
+    width: 12px;
+    height: 12px;
+    margin-left: 12px;
 }
