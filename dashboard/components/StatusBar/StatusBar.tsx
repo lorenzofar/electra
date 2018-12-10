@@ -1,6 +1,8 @@
 import * as React from "react";
 
-interface StatusBarState{
+import "./style.css";
+
+interface StatusBarState{       
     connectedUsers: number; // Total number of connected users (monitored)
 
 }

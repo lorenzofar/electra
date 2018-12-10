@@ -9,8 +9,6 @@ import { StatusBar } from "../StatusBar/StatusBar";
 
 import "./style.css";
 
-
-
 interface AppState {
     //TODO: Define app state
     loading: boolean;

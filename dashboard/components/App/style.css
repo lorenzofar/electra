@@ -18,5 +18,4 @@
 
 #status-bar{
     grid-area: statusbar;
-    background-color: var(--accent)
 }

@@ -1,0 +1,6 @@
+#status-bar{
+    display: flex;
+    align-items: center;
+    background-color: var(--accent);
+    padding: 0px 12px;
+}
