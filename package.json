@@ -33,6 +33,7 @@
     "socketio-wildcard": "^2.0.0",
     "style-loader": "^0.23.1",
     "typescript": "^3.1.6",
+    "victory": "^31.0.1",
     "webpack": "^4.27.1"
   },
   "devDependencies": {
@@ -43,6 +44,7 @@
     "@types/react-dom": "^16.0.11",
     "@types/serve-static": "^1.13.2",
     "@types/socket.io-client": "^1.4.32",
+    "@types/victory": "^0.9.21",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.4",
