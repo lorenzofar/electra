@@ -73,9 +73,6 @@ class App extends React.Component<{}, AppState> {
          * Hence we now request credentials to open a socket connection (TODO:)
          */
 
-
-        // TODO: Subscribe to welcome event
-
         fetch("/credentials").then(res => {
             return res.json().then(data => {
                 this.setState({ username: data.username });
@@ -86,11 +83,9 @@ class App extends React.Component<{}, AppState> {
 
 
     handleInitialCache(initialData: initialCacheEntry[]) {
-        console.log("Handling initial cache");
         let cache = this.state.cache; // It is anyway an empty map
         initialData.forEach(entry => {
             cache[entry.username] = entry.data;
-            console.log(`Adding row for ${entry.username}`);
         });
         this.setState({ cache: cache });
     }
@@ -114,14 +109,12 @@ class App extends React.Component<{}, AppState> {
         let cache = this.state.cache;
         cache[username] = [];
         this.setState({ cache: cache });
-        console.log("[APP] a new user connected");
     }
 
     handleUserDisconnection(username: string) {
         let cache = this.state.cache;
         if (username in cache) delete cache[username];
         this.setState({ cache: cache });
-        console.log("[APP] a user disconnected");
     }
 
     /**
@@ -131,7 +124,6 @@ class App extends React.Component<{}, AppState> {
      * @param connected 
      */
     handleConnectedStatus(connected: boolean) {
-        console.log(connected);
         this.setState({ connected: connected });
     }
 

@@ -17,7 +17,6 @@ export class StatusBar extends React.Component<StatusBarProps, StatusBarState>{
     }
 
     render() {
-        console.log(this.props.connected);
         return (
             <div id="status-bar">
                 <span>
