@@ -1,58 +1,21 @@
 import * as React from "react";
 
-import SocketManager from "../../providers/socketManager";
-
 import "./style.css";
-
-interface UsersListState {
-    users: string[];
-}
 
 interface UserCardProps {
     username: string;
 }
 
-interface initialCacheEntry {
-    username: string;
-    data: any[];
+interface UserListProps {
+    users: string[];
 }
 
+export class UsersList extends React.Component<UserListProps, {}>{
 
-export class UsersList extends React.Component<{}, UsersListState>{
+    // TODO: Just use app props and do not rely on an internal state
 
     constructor(props: any) {
         super(props);
-        this.state = { users: [] };
-        this.handleUserConnection = this.handleUserConnection.bind(this);
-        this.handleUserDisconnection = this.handleUserDisconnection.bind(this);
-        this.handleInitialCache = this.handleInitialCache.bind(this);
-    }
-
-    componentDidMount() {
-        SocketManager.subscribe("deviceconnected", this.handleUserConnection);
-        SocketManager.subscribe("devicedisconnected", this.handleUserDisconnection);
-        SocketManager.subscribe("welcome", this.handleInitialCache);
-    }
-
-    handleInitialCache(data: initialCacheEntry[]) {
-        // Populate list of users with data retrieved from the welcome message
-        let initialUsers = data.map(entry => entry.username);
-        this.setState({ users: initialUsers });
-    }
-
-    handleUserConnection(username: string) {
-        console.log("A device connected")
-        let currentUsers = this.state.users;
-        currentUsers.push(username);
-        this.setState({ users: currentUsers });
-    }
-
-    handleUserDisconnection(username: string) {
-        console.log("A device disconnected");
-        let currentUsers = this.state.users;
-        let index = currentUsers.indexOf(username);
-        currentUsers.splice(index, 1);
-        this.setState({ users: currentUsers });
     }
 
     render() {
@@ -61,7 +24,7 @@ export class UsersList extends React.Component<{}, UsersListState>{
             <div id="users-list" className="shadowed">
                 <span className="pane-title">Connected users</span>
                 <br></br>
-                {this.state.users.map((user, i) =>
+                {this.props.users.map((user, i) =>
                     <UserCard key={i} username={user} />
                 )}
             </div>
@@ -72,7 +35,7 @@ export class UsersList extends React.Component<{}, UsersListState>{
 class UserCard extends React.Component<UserCardProps, {}>{
     render() {
         return (
-                <p>{this.props.username}</p>
+            <p>{this.props.username}</p>
         )
     }
 }
