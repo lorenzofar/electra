@@ -4,7 +4,8 @@ import SocketManager from "../../providers/socketManager";
 
 /* ===== LOAD COMPONENTS ===== */
 import { UsersList } from "../UsersList/UsersList";
-import {StatusBar} from "../StatusBar/StatusBar";
+import { Header } from "../Header/Header";
+import { StatusBar } from "../StatusBar/StatusBar";
 
 import "./style.css";
 
@@ -14,6 +15,7 @@ interface AppState {
     //TODO: Define app state
     loading: boolean;
     connected: boolean;
+    username: string;
 }
 
 class App extends React.Component<{}, AppState> {
@@ -23,8 +25,9 @@ class App extends React.Component<{}, AppState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            loading: true, 
-            connected: false
+            loading: true,
+            connected: false,
+            username: ""
         }
         this.handleConnectedStatus = this.handleConnectedStatus.bind(this);
     }
@@ -42,6 +45,7 @@ class App extends React.Component<{}, AppState> {
 
         fetch("/credentials").then(res => {
             return res.json().then(data => {
+                this.setState({ username: data.username });
                 this.SM = new SocketManager(data.username, data.password, this.handleConnectedStatus);
             });
         });
@@ -54,21 +58,21 @@ class App extends React.Component<{}, AppState> {
      * in order to show connection status to the user
      * @param connected 
      */
-    handleConnectedStatus(connected: boolean){
+    handleConnectedStatus(connected: boolean) {
         console.log(connected);
-        this.setState({connected: connected});
+        this.setState({ connected: connected });
     }
 
 
     render() {
         return (
             <div id="app">
-                <div id="header"></div>
+                <Header username={this.state.username} />
                 <div id="main-container">
-                    <UsersList/>
+                    <UsersList />
                 </div>
                 <StatusBar id="status-bar" connected={this.state.connected}></StatusBar>
-                
+
             </div>
         )
     };

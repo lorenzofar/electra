@@ -1,0 +1,18 @@
+#header{
+    display: grid;
+    grid-template-areas: "logo userinfo";
+    grid-template-columns: 1fr auto;
+    grid-column-gap: 12px;
+    padding: 12px;
+}
+
+#header > #logo{
+    grid-area: logo;
+    font-weight: bold;
+}
+
+#header > #userinfo{
+    display: inline-flex;
+    flex-direction: row;
+    grid-area: userinfo;
+}
