@@ -10,15 +10,13 @@
 
 #header{
     grid-area: header;
-    background-color: yellow;
 }
 
 #main-container{
     grid-area: main;
-    background-color: red;
 }
 
 #status-bar{
     grid-area: statusbar;
-    background-color: blue;
+    background-color: var(--accent)
 }
