@@ -2,6 +2,7 @@ import * as React from "react";
 
 import SocketManager from "../../providers/socketManager";
 
+import "./style.css";
 
 interface UsersListState {
     users: string[];
@@ -34,7 +35,7 @@ export class UsersList extends React.Component<{}, UsersListState>{
     }
 
     handleInitialCache(data: initialCacheEntry[]) {
-         // Populate list of users with data retrieved from the welcome message
+        // Populate list of users with data retrieved from the welcome message
         let initialUsers = data.map(entry => entry.username);
         this.setState({ users: initialUsers });
     }
@@ -57,9 +58,13 @@ export class UsersList extends React.Component<{}, UsersListState>{
     render() {
         // Show the list of all connected users
         return (
-            this.state.users.map((user, i) =>
-                <UserCard key={i} username={user} />
-            )
+            <div id="users-list" className="shadowed">
+                <span className="pane-title">Connected users</span>
+                <br></br>
+                {this.state.users.map((user, i) =>
+                    <UserCard key={i} username={user} />
+                )}
+            </div>
         );
     }
 }
@@ -67,9 +72,7 @@ export class UsersList extends React.Component<{}, UsersListState>{
 class UserCard extends React.Component<UserCardProps, {}>{
     render() {
         return (
-            <div>
                 <p>{this.props.username}</p>
-            </div>
         )
     }
 }
