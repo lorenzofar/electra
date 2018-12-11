@@ -7,10 +7,15 @@ interface chartData {
     [username: string]: any[];
 }
 
+interface chartStrokes {
+    [username: string]: string;
+}
+
 interface chartProps {
     id: string;
     description: string;
-    data: chartData
+    data: chartData;
+    strokes: chartStrokes;
 }
 
 export class ChartPane extends React.Component<chartProps, {}>{
@@ -24,6 +29,9 @@ export class ChartPane extends React.Component<chartProps, {}>{
                         <V.VictoryLine
                             key={i}
                             data={this.props.data[user]}
+                            style={
+                                { data: { stroke: this.props.strokes[user] } }
+                            }
                         >
                         </V.VictoryLine>
                     )}
