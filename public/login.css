@@ -1,0 +1,10 @@
+#login-form{
+    width: 75%;
+    max-width: 400px;
+    margin: 48px auto 12px auto;
+}
+
+#login-form > button{
+    background-color: var(--accent);
+    border-color: var(--accent);
+}

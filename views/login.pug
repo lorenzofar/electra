@@ -1,10 +1,16 @@
 extends layout
 
+block extraStyles
+    link(rel="stylesheet", href="/login.css")
+
 block content
 
-    div
-        h1 Mi dispiace ma devi fare il login :/
-        form(action="/login", method="GET")
-            input(name="username" placeholder="Enter username")
-            input(name="password" placeholder="Enter password" type="password")
-            button(type="submit") Log in
+    form#login-form(action="/login", method="GET")
+        span.pane-title Log in to access the dashboard
+        .form-group
+            label(for="username") Username
+            input#username.form-control(name="username" placeholder="Enter username" required)
+        .form-group
+            label(for="password") Password
+            input#password.form-control(name="password" placeholder="Enter password" type="password" required)
+        button.btn.btn-primary(type="submit") Log in
