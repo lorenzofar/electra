@@ -13,9 +13,26 @@
 }
 
 #main-container{
-    grid-area: main;
+    display: grid;
+    grid-template-areas: "temp light users-list";
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
 }
 
 #status-bar{
     grid-area: statusbar;
+}
+
+#users-list{
+    grid-area: users-list;
+}
+
+#chart-temp{
+    grid-area: temp;
+}
+
+#chart-light{
+    grid-area: light;
 }

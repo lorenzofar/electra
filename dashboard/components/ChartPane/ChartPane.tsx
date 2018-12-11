@@ -20,7 +20,6 @@ interface chartProps {
 
 export class ChartPane extends React.Component<chartProps, {}>{
     render() {
-        console.log(this.props.data);
         return (
             <div id={this.props.id} className="chart-pane shadowed">
                 <span className="pane-title">{this.props.description}</span>

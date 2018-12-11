@@ -37,8 +37,6 @@ class SocketManager {
         let event = message.data[0];
         let data = message.data[1];
 
-        console.log(`[SOCKET] arrived ${event} message`);
-
         if (!(event in SocketManager.subscriptionMap)) return;
 
         // Pass the data to all the subscribed handlers of the event
@@ -50,7 +48,6 @@ class SocketManager {
         //FIXME: possible memory leaks if someone keeps pushing the same functio over and over
         if (!(event in this.subscriptionMap)) this.subscriptionMap[event] = [];
         this.subscriptionMap[event].push(handler);
-        console.log(`[SOCKET] a module subscribed for ${event} event`);
         return true;
     }
 }
