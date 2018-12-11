@@ -44,6 +44,18 @@ class Dispatcher {
     }
 
     /**
+     * Send a socket message to connected users
+     * @param event 
+     * @param data 
+     */
+    public static notifyListeners(event: string, data: any){
+        if(!event || !data) return;
+        this.listeners.forEach(listener => {
+            listener.socket.emit(event, data);
+        })
+    }
+
+    /**
      * Send the cache back to the listener after its connection
      * 
      */

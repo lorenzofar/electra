@@ -86,7 +86,7 @@ class CacheManager {
                 username: username,
                 data: dataPoint
             };
-            Emitter.emit("datapoint", dispatchedPoint); // Send data point to listeners
+            Dispatcher.notifyListeners("datapoint", dispatchedPoint); // Send data point to listeners
 
         }
         else {
