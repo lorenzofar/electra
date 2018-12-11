@@ -14,11 +14,11 @@ import DataPoint from "../../../src/models/dataPoint";
 import "./style.css";
 
 interface AppState {
-    //TODO: Define app state
     loading: boolean;
     connected: boolean;
     username: string;
-    cache: AppCache
+    cache: AppCache;
+    users: usersMap;
 }
 
 interface incomingData {
@@ -26,8 +26,16 @@ interface incomingData {
     data: DataPoint
 }
 
+interface AppCacheSensorData {
+    [username: string]: any[];
+};
+
 interface AppCache {
-    [username: string]: DataPoint[];
+    [sensor: string]: AppCacheSensorData;
+}
+
+interface usersMap {
+    [username: string]: string; // store the color of the user
 }
 
 interface initialCacheEntry {
@@ -47,7 +55,8 @@ class App extends React.Component<{}, AppState> {
             loading: true,
             connected: false,
             username: "",
-            cache: {}
+            cache: {},
+            users: {}
         }
         this.handleConnectedStatus = this.handleConnectedStatus.bind(this);
         this.handleInitialCache = this.handleInitialCache.bind(this);
@@ -70,7 +79,7 @@ class App extends React.Component<{}, AppState> {
          * The app has been initialized
          * If the page has opened, it means that the user
          * has provided a valid token.
-         * Hence we now request credentials to open a socket connection (TODO:)
+         * Hence we now request credentials to open a socket connection
          */
 
         fetch("/credentials").then(res => {
@@ -84,10 +93,48 @@ class App extends React.Component<{}, AppState> {
 
     handleInitialCache(initialData: initialCacheEntry[]) {
         let cache = this.state.cache; // It is anyway an empty map
+
+        let users: usersMap = {};
+
         initialData.forEach(entry => {
-            cache[entry.username] = entry.data;
+            users[entry.username] = "#669900"; // TODO: Generate random color
         });
-        this.setState({ cache: cache });
+
+        // After having the list of users, use it to build the cache
+        // Get a sample data point
+        if (initialData.length) {
+            // Here we create the structure
+            let sampleData = initialData[0].data;
+            if (sampleData.length) {
+                let samplePoint = sampleData[0].data;
+                // Iterate over the sensors
+                Object.keys(samplePoint).forEach(sensor => {
+                    cache[sensor] = {};
+                    Object.keys(users).forEach(user => {
+                        cache[sensor][user] = [];
+                    })
+                })
+            }
+
+            // Here we load data into the cache
+            initialData.forEach(entry => {
+                // Get username 
+                let username = entry.username;
+                let userData = entry.data; // Get user data
+                // Get sample point
+
+                userData.forEach(dp => {
+                    let data = dp.data;
+                    let sensors = Object.keys(data); // Get sensors
+                    sensors.forEach(sensor => {
+                        cache[sensor][username].push({ y: data[sensor] });
+                    })
+                })
+            })
+
+        }
+
+        this.setState({ cache: cache, users: users });
     }
 
     handleNewData(DataPoint: incomingData) {
@@ -96,30 +143,52 @@ class App extends React.Component<{}, AppState> {
 
         let cache = this.state.cache; // Get cache 
 
-        if (!(username in cache)) cache[username] = []; // Initialize if needed
+        // Get structure of data point
+        let sensors = Object.keys(data.data);
 
-        let userData = cache[username];
-        let totalCount = userData.push(data); // Add data
-        if (totalCount > CACHE_LIMIT) userData.shift(); // Check cache length limit
+        sensors.forEach(sensor => {
+            if (!(sensor in cache)) {
+                cache[sensor] = {};
+            }
+            if (!(username in cache[sensor])) {
+                cache[sensor][username] = [];
+            }
+            let totalCount = cache[sensor][username].push({ y: data.data[sensor] });
+            if (totalCount > CACHE_LIMIT) cache[sensor][username].shift();
+        });
 
         this.setState({ cache: cache }); // Update state
     }
 
     handleUserConnection(username: string) {
         let cache = this.state.cache;
-        cache[username] = [];
-        this.setState({ cache: cache });
+        let users = this.state.users;
+        users[username] = ""; // TODO: Generate random color
+        Object.keys(cache).forEach(sensor => {
+            cache[sensor][username] = []; // initialize cache for the user
+        })
+        this.setState({ cache: cache, users: users });
     }
 
     handleUserDisconnection(username: string) {
         let cache = this.state.cache;
-        if (username in cache) delete cache[username];
-        this.setState({ cache: cache });
+        let users = this.state.users;
+
+        if (username in users) delete users[username]; // remove user from list
+
+        // Iterate over sensors in cache and remove user's data
+        Object.keys(cache).forEach(sensor => {
+            if (username in cache[sensor]) {
+                delete cache[sensor][username];
+            }
+        })
+
+        this.setState({ cache: cache, users: users });
     }
 
     /**
      * This function handles changes in connection to the socket
-     * It provides the status as a state property (TODO:), which is passed to status bar
+     * It provides the status as a state property, which is passed to status bar
      * in order to show connection status to the user
      * @param connected 
      */
@@ -127,14 +196,20 @@ class App extends React.Component<{}, AppState> {
         this.setState({ connected: connected });
     }
 
-
     render() {
         return (
             <div id="app">
                 <Header username={this.state.username} />
                 <div id="main-container">
-                    <UsersList users={Object.keys(this.state.cache)} />
-
+                    <UsersList users={Object.keys(this.state.users)} />
+                    {Object.keys(this.state.cache).map((sensor, i) =>
+                        <ChartPane
+                            key={i}
+                            description={sensor}
+                            data={this.state.cache[sensor]}
+                            id={sensor}>
+                        </ChartPane>
+                    )}
                 </div>
                 <StatusBar connected={this.state.connected}></StatusBar>
 
