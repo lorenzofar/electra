@@ -4,15 +4,18 @@ import "./style.css";
 
 interface UserCardProps {
     username: string;
+    color: string;
+}
+
+interface usersMap {
+    [username: string]: string; // store the color of the user
 }
 
 interface UserListProps {
-    users: string[];
+    users: usersMap;
 }
 
 export class UsersList extends React.Component<UserListProps, {}>{
-
-    // TODO: Just use app props and do not rely on an internal state
 
     constructor(props: any) {
         super(props);
@@ -24,8 +27,8 @@ export class UsersList extends React.Component<UserListProps, {}>{
             <div id="users-list" className="shadowed">
                 <span className="pane-title">Connected users</span>
                 <br></br>
-                {this.props.users.map((user, i) =>
-                    <UserCard key={i} username={user} />
+                {Object.keys(this.props.users).map(user =>
+                    <UserCard key={user} username={user} color={this.props.users[user]} />
                 )}
             </div>
         );
@@ -35,7 +38,7 @@ export class UsersList extends React.Component<UserListProps, {}>{
 class UserCard extends React.Component<UserCardProps, {}>{
     render() {
         return (
-            <p>{this.props.username}</p>
+            <p style={{ color: this.props.color }}>{this.props.username}</p>
         )
     }
 }

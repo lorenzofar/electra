@@ -1,4 +1,5 @@
 import * as React from "react";
+const randomcolor = require("randomcolor");
 
 import SocketManager from "../../providers/socketManager";
 
@@ -97,7 +98,7 @@ class App extends React.Component<{}, AppState> {
         let users: usersMap = {};
 
         initialData.forEach(entry => {
-            users[entry.username] = "#669900"; // TODO: Generate random color
+            users[entry.username] = randomcolor(); // TODO: Generate random color
         });
 
         // After having the list of users, use it to build the cache
@@ -121,6 +122,9 @@ class App extends React.Component<{}, AppState> {
                 // Get username 
                 let username = entry.username;
                 let userData = entry.data; // Get user data
+
+                // Cap the data to only the most recent values
+                userData = userData.slice(Math.max(userData.length - CACHE_LIMIT, 0));
                 // Get sample point
 
                 userData.forEach(dp => {
@@ -163,7 +167,7 @@ class App extends React.Component<{}, AppState> {
     handleUserConnection(username: string) {
         let cache = this.state.cache;
         let users = this.state.users;
-        users[username] = ""; // TODO: Generate random color
+        users[username] = randomcolor(); // TODO: Generate random color
         Object.keys(cache).forEach(sensor => {
             cache[sensor][username] = []; // initialize cache for the user
         })
@@ -201,12 +205,13 @@ class App extends React.Component<{}, AppState> {
             <div id="app">
                 <Header username={this.state.username} />
                 <div id="main-container">
-                    <UsersList users={Object.keys(this.state.users)} />
+                    <UsersList users={this.state.users} />
                     {Object.keys(this.state.cache).map((sensor, i) =>
                         <ChartPane
                             key={i}
                             description={sensor}
                             data={this.state.cache[sensor]}
+                            strokes={this.state.users}
                             id={sensor}>
                         </ChartPane>
                     )}
