@@ -1,6 +1,7 @@
 /* ===== EXTERNAL MODULES ===== */
 require("dotenv").config();
 import * as express from "express";
+import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 const cookieSession = require("cookie-session");
 import * as path from "path";
@@ -39,6 +40,7 @@ var app: express.Application = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser());
 
 app.use(cookieSession({
     name: "session",
@@ -79,10 +81,10 @@ router.get("/", (req: express.Request, res: express.Response) => {
     }
 });
 
-router.get("/login", (req: express.Request, res: express.Response) => {
+router.post("/login", (req: express.Request, res: express.Response) => {
     if (!req.query) return res.status(400).end();
-    let username = req.query.username;
-    let password = req.query.password;
+    let username = req.body && req.body.username;
+    let password = req.body && req.body.password;
     if (!username || !password) return res.status(400).end();
 
     console.log(`[SERVER] ${username} is trying to load the dashboard`);
