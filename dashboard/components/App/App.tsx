@@ -185,6 +185,10 @@ class App extends React.Component<{}, AppState> {
         Object.keys(cache).forEach(sensor => {
             if (username in cache[sensor]) {
                 delete cache[sensor][username];
+                // Check if the sensor is without users
+                if (!(Object.keys(cache[sensor]).length)) {
+                    delete cache[sensor];
+                }
             }
         })
 
