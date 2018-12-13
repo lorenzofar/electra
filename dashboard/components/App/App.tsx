@@ -8,6 +8,7 @@ import { UsersList } from "../UsersList/UsersList";
 import { Header } from "../Header/Header";
 import { StatusBar } from "../StatusBar/StatusBar";
 import { ChartPane } from "../ChartPane/ChartPane";
+import { DataTable } from "../DataTable/DataTable";
 
 /* ===== LOAD MODELS ===== */
 import DataPoint from "../../../src/models/dataPoint";
@@ -98,7 +99,7 @@ class App extends React.Component<{}, AppState> {
         let users: usersMap = {};
 
         initialData.forEach(entry => {
-            users[entry.username] = randomcolor(); // TODO: Generate random color
+            users[entry.username] = randomcolor();
         });
 
         // After having the list of users, use it to build the cache
@@ -167,7 +168,7 @@ class App extends React.Component<{}, AppState> {
     handleUserConnection(username: string) {
         let cache = this.state.cache;
         let users = this.state.users;
-        users[username] = randomcolor(); // TODO: Generate random color
+        users[username] = randomcolor();
         Object.keys(cache).forEach(sensor => {
             cache[sensor][username] = []; // initialize cache for the user
         })
@@ -201,6 +202,10 @@ class App extends React.Component<{}, AppState> {
     }
 
     render() {
+
+        // Update the number of charts used to build layout grids
+        document.documentElement.style.setProperty('--charts', Object.keys(this.state.cache).length.toString());
+
         return (
             <div id="app">
                 <Header username={this.state.username} />
@@ -215,6 +220,7 @@ class App extends React.Component<{}, AppState> {
                             id={sensor}>
                         </ChartPane>
                     )}
+                    <DataTable users={this.state.users} data={this.state.cache}></DataTable>
                 </div>
                 <StatusBar connected={this.state.connected}></StatusBar>
 
