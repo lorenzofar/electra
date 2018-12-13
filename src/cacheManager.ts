@@ -74,8 +74,6 @@ class CacheManager {
     /* ===== DATA HANDLING ===== */
     //FIXME: Change datatype of parameter
     public static handleIncomingDataPoint(socket: socket_io.Socket, username: string, dataPoint: DataPoint) {
-        console.log(`[CACHE] received data point from ${username}`);
-        console.log(`[CACHE] ${username} says '${dataPoint}'`);
         // Check if the user exists in the cache
         if (this.isUserPresent(username)) {
             let len = this._cache[username].data.length; // Get current number of elements
