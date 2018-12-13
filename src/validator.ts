@@ -68,7 +68,8 @@ class Validator {
 
                 encryption.compare(password, hashed)
                     .then((match: boolean) => {
-                        callback(result[0]);
+                        if (!match) callback(null);
+                        else callback(result[0]);
                     })
                     .catch((err) => {
                         callback(null);
