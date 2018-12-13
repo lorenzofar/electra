@@ -82,32 +82,32 @@ router.get("/", (req: express.Request, res: express.Response) => {
 });
 
 router.post("/login", (req: express.Request, res: express.Response) => {
-    if (!req.query) return res.status(400).end();
+    if (!req.body) return res.status(400).end();
     let username = req.body && req.body.username;
     let password = req.body && req.body.password;
     if (!username || !password) return res.status(400).end();
 
     console.log(`[SERVER] ${username} is trying to load the dashboard`);
 
-    //FIXME: TODO: Perform a login with NECST APIs
-    let loginResult: boolean = true;
+    Validator.validateDashboardAccess(username, password, (authorized: boolean, admin: boolean) => {
+        if (!authorized) {
+            // The user is not authorized to log in
+            return res.redirect("../error");
+        }
 
-    if (!loginResult) return res.status(403).end();
+        // Here the user is authorized
+        let tokenData: TokenData = {
+            username: username,
+            password: password,
+            admin: admin
+        }
+        let token = TokenHelper.signToken(tokenData);
 
-    // Retrieve role
+        console.log(`[SERVER] dashboard access granted to ${username}`);
 
-    //Sign token
-    let tokenData: TokenData = {
-        username: username,
-        password: password,
-        admin: true //FIXME:
-    }
-    let token = TokenHelper.signToken(tokenData);
-
-    console.log(`[SERVER] dashboard access granted to ${username}`);
-    
-    req.session.token = token;
-    res.redirect("../");
+        req.session.token = token;
+        res.redirect("../");
+    });
 });
 
 router.get("/logout", (req: express.Request, res: express.Response) => {

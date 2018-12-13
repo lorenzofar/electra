@@ -1,8 +1,7 @@
-import * as request from "request";
-
 import * as messages from "./models/messages";
-import * as constants from "./constants";
 import CacheManager from "./cacheManager";
+import dbClient from "./dbManager";
+import * as encryption from "./encryption";
 
 class Validator {
     public static validateHandshake(handshake: messages.socketHandshake, callback: (result: boolean) => void): void {
@@ -23,37 +22,58 @@ class Validator {
         }
 
         let username = handshake.username; // Get provided username
-        let tempCheckHolder = username != null; // && constants.MAILADDR_REGEX.test(username); // Test username against regex
+        let password = handshake.password; // Get provided password
+        let tempCheckHolder = username != null;
         if (!tempCheckHolder) {
             callback(false); // If the provided username is not valid, stop
             return;
         }
 
-        // Check if the username is already connected
-
-        tempCheckHolder = CacheManager.isUserPresent(username); // Check if the client associated to the username is already connected
-        if (tempCheckHolder) {
-            callback(false); // The user is already connected
-            return;
+        // Check if the user is present in database
+        // Try to login and pass the result back the callcback
+        if (handshake.mode === "provider") {
+            if (CacheManager.isUserPresent(username)) { // Check if the client associated to the username is already connected
+                return callback(false); // The user is already connected
+            }
+            this.login(username, password, (result) => {
+                if (result) callback(true);
+                else callback(false);
+            });
+        }
+        else {
+            this.validateDashboardAccess(username, password, (authorized, admin) => {
+                if (!authorized || (authorized && !admin)) callback(false);
+                else callback(true);
+            });
         }
 
-        //FIXME: Use temporary override until APIs are available
-        callback(true);
 
-        // try to login 
-        /*
-        //FIXME: Use Basic authentication when submitting request
-        request
-            .get(`${constants.BASE_URL}/login`, (err, response, body) => {
-                if (err) { // An error occurred performing the request
-                    console.log(err);
-                    callback(false);
-                }
-                else { // All's well that ends well
-                    callback(true);
-                };
+    }
+
+    public static validateDashboardAccess(username: string, password: string, callback: (authorized: boolean, admin: boolean) => void) {
+        this.login(username, password, (result) => {
+            if (!result) callback(false, false);
+            else if (result && result.admin) callback(true, true);
+            else callback(true, false);
+        });
+    }
+
+    public static login(username: string, password: string, callback: (result: any) => void) {
+        dbClient("users").select("*").where({ username: username })
+            .then((result: any[]) => {
+
+                if (!result.length) return callback(null)
+
+                let hashed: string = result[0].password;
+
+                encryption.compare(password, hashed)
+                    .then((match: boolean) => {
+                        callback(result[0]);
+                    })
+                    .catch((err) => {
+                        callback(null);
+                    })
             });
-        */
     }
 }
 
