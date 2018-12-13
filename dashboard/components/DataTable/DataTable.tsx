@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import "./style.css";
+
 interface DataTableProps {
     data: any;
     users: any;
@@ -10,7 +12,7 @@ const UNDEF_VALUE = "---";
 export class DataTable extends React.Component<DataTableProps, null>{
     render() {
         return (
-            <div id="data-table" className="table-responsive shadowed">
+            <div id="data-table" className="shadowed">
                 <table className="table header-fixed">
                     <thead>
                         <tr>
