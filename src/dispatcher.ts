@@ -62,6 +62,13 @@ class Dispatcher {
         allowedListeners.forEach(listener => listener.socket.emit(event, data));
     }
 
+    public static notifyConnectionStatus(event: "deviceconnected" | "devicedisconnected", username: string) {
+        if (!event || !username) return;
+        // Filter the listeners to only keep admins and the owener of the data
+        let allowedListeners = this.listeners.filter(listener => listener.admin || listener.username === username);
+        allowedListeners.forEach(listener => listener.socket.emit(event, username));
+    }
+
     /**
      * Send the cache back to the listener after its connection
      * 

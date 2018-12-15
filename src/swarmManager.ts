@@ -1,6 +1,6 @@
 import Client from "./models/client";
 import CacheManager from "./cacheManager";
-import Emitter from "./emitter";
+import Dispatcher from "./dispatcher";
 
 class SwarmManager {
     /* ===== PROVIDERS ===== */
@@ -14,7 +14,7 @@ class SwarmManager {
         let result = CacheManager.addEntry(client);
         //TODO: Notify listeners
         console.log(`[SWARM] ${client.username} addition: ${result ? "success" : "error"}`);
-        if(result) Emitter.emit("deviceconnected", client.username);
+        if (result) Dispatcher.notifyConnectionStatus("deviceconnected", client.username);
         return result;
     }
 
@@ -22,7 +22,7 @@ class SwarmManager {
         let result = CacheManager.removeEntry(username);
         //TODO: Notify listeners
         console.log(`[SWARM] ${username} removal: ${result ? "success" : "error"}`);
-        if(result) Emitter.emit("devicedisconnected", username);
+        if (result) Dispatcher.notifyConnectionStatus("devicedisconnected", username);
         return result;
     }
 }
