@@ -67,9 +67,15 @@ class Dispatcher {
      * 
      */
     private static sendWelcomeData(listener: Listener) {
-        console.log(`[DISPATCHER] sending initial data to ${listener.username}`);
-        //TODO: Check if the listener is an admin or a user and get data accordingly
+        console.log(`[DISPATCHER] sending initial data to ${listener.username} - admin: ${listener.admin}`);
+
         let data = CacheManager.parsedCache; // Get data from cache manager
+
+        // If the listener is not an admin, filter the data availabl
+        if (!listener.admin) {
+            data = data.filter(d => d.username === listener.username); // Only get the items belonging to the user
+        };
+        
         listener.socket.emit("welcome", data); // Send those data back to the connected user
     }
 
