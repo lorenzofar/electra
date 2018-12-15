@@ -54,7 +54,7 @@ class Emitter {
         // Check if the client that is trying to connect can do it
         // If not, send an error message and close the connection
 
-        Validator.validateHandshake(clientData, (result: boolean) => {
+        Validator.validateHandshake(clientData, (result: boolean, admin: boolean) => {
             console.log(`[EMITTER] validation result for ${clientData.username}: ${result}`);
             if (!result) {
                 socket.send("unathorized").disconnect();
@@ -72,7 +72,7 @@ class Emitter {
                 let newListener: Listener = {
                     socket: socket,
                     username: clientData.username,
-                    admin: false
+                    admin: admin
                 }
                 //TODO: Assign admin rights
                 let additionResult = Dispatcher.addListener(newListener);
@@ -112,8 +112,8 @@ class Emitter {
         }
     }
 
-    public static emit(event: string, data: any){
-        if(!event || !data) return;
+    public static emit(event: string, data: any) {
+        if (!event || !data) return;
         this.io.emit(event, data);
     }
 }
