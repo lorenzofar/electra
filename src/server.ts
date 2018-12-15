@@ -81,9 +81,11 @@ router.get("/", (req: express.Request, res: express.Response) => {
 
 router.post("/login", (req: express.Request, res: express.Response) => {
     if (!req.body) return res.status(400).end();
-    let username = req.body && req.body.username;
-    let password = req.body && req.body.password;
+    let username: string = req.body && req.body.username;
+    let password: string = req.body && req.body.password;
     if (!username || !password) return res.status(400).end();
+
+    username = username.toLowerCase();
 
     console.log(`[SERVER] ${username} is trying to load the dashboard`);
 
@@ -103,9 +105,6 @@ router.post("/login", (req: express.Request, res: express.Response) => {
 
         console.log(`[SERVER] dashboard access granted to ${username}`);
 
-        //FIXME: Here the dashboard can be loaded only by an admin, since 
-        // a normal user is redirected only to the error page
-
         req.session.token = token;
         res.redirect("../");
     });
@@ -114,6 +113,8 @@ router.post("/login", (req: express.Request, res: express.Response) => {
 router.post("/register", (req: express.Request, res: express.Response) => {
     let { username, password } = req.body;
     if (!username || !password) return res.status(400).end();
+
+    username = username.toLowerCase();
 
     Encryption.crypt(password, (err: any, hash: string) => {
         if (err) return res.status(500).end();
