@@ -4,7 +4,7 @@ import dbClient from "./dbManager";
 import * as encryption from "./encryption";
 
 class Validator {
-    public static validateHandshake(handshake: messages.socketHandshake, callback: (result: boolean) => void): void {
+    public static validateHandshake(handshake: messages.socketHandshake, callback: (result: boolean, admin?: boolean) => void): void {
         /**
          * This method checks if a user can connect to the server or not.
          * It checks:
@@ -42,8 +42,7 @@ class Validator {
         }
         else {
             this.validateDashboardAccess(username, password, (authorized, admin) => {
-                if (!authorized || (authorized && !admin)) callback(false);
-                else callback(true);
+                callback(authorized, admin); // Simply pass the result back to the callback
             });
         }
 
