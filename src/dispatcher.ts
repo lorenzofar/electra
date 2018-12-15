@@ -55,7 +55,7 @@ class Dispatcher {
      * @param event 
      * @param data 
      */
-    public static notifyListeners(event: string, data: dispatchedPoint) {
+    public static notifyData(event: string, data: dispatchedPoint) {
         if (!event || !data) return;
         // Filter the listeners to only keep admins and the owener of the data
         let allowedListeners = this.listeners.filter(listener => listener.admin || listener.username === data.username);
@@ -75,7 +75,7 @@ class Dispatcher {
         if (!listener.admin) {
             data = data.filter(d => d.username === listener.username); // Only get the items belonging to the user
         };
-        
+
         listener.socket.emit("welcome", data); // Send those data back to the connected user
     }
 
