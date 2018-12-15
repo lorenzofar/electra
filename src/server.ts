@@ -13,6 +13,8 @@ import * as figlet from "figlet";
 import Emitter from "./emitter";
 import { TokenData, TokenHelper } from "./tokenHelper";
 import Validator from "./validator";
+import * as Encryption from "./encryption";
+import dbClient from "./dbManager";
 
 const { PORT = 3000 } = process.env; // Get custom port oof fall back to 3000
 
@@ -107,6 +109,35 @@ router.post("/login", (req: express.Request, res: express.Response) => {
 
         req.session.token = token;
         res.redirect(200, "../");
+    });
+});
+
+router.post("/register", (req: express.Request, res: express.Response) => {
+    let { username, password } = req.body;
+    if (!username || !password) return res.status(400).end();
+
+    Encryption.crypt(password, (err: any, hash: string) => {
+        if (err) return res.status(500).end();
+
+        let userData = {
+            username: username,
+            password: hash,
+            admin: false
+        };
+        dbClient("users").insert(userData)
+            .then(() => {
+                res.status(200).end();
+            })
+            .catch(err => {
+                switch (err.code) {
+                    case '23505':
+                        res.status(409).end();
+                        break;
+                    default:
+                        res.status(500).end();
+                        break;
+                }
+            });
     });
 });
 
