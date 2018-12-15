@@ -94,7 +94,7 @@ router.post("/login", (req: express.Request, res: express.Response) => {
     Validator.validateDashboardAccess(username, password, (authorized: boolean, admin: boolean) => {
         if (!authorized) {
             // The user is not authorized to log in
-            return res.redirect(403, "../error");
+            return res.redirect("../error");
         }
 
         // Here the user is authorized
@@ -108,7 +108,7 @@ router.post("/login", (req: express.Request, res: express.Response) => {
         console.log(`[SERVER] dashboard access granted to ${username}`);
 
         req.session.token = token;
-        res.redirect(200, "../");
+        res.redirect("../");
     });
 });
 
