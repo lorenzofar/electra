@@ -62,14 +62,10 @@ router.get("/", (req: express.Request, res: express.Response) => {
         // If not, remove it
         TokenHelper.parseToken(token, (decoded) => {
             if (decoded != null) {
-                // The token is valid
-                if (decoded.admin) { // Check if the user is an admin
-                    //FIXME: Also handle the case where the user is not an admin
-                    res.render("index");
-                }
-                else {
-                    res.render("error");
-                }
+
+                console.log(`[SERVER] dashboard loaded for ${decoded.username} - admin: ${decoded.admin}`);
+                res.render("dashboard");
+
             }
             else {
                 // TODO: Nella pagina di errore mettere anche un pulsante per fare il login
@@ -106,6 +102,9 @@ router.post("/login", (req: express.Request, res: express.Response) => {
         let token = TokenHelper.signToken(tokenData);
 
         console.log(`[SERVER] dashboard access granted to ${username}`);
+
+        //FIXME: Here the dashboard can be loaded only by an admin, since 
+        // a normal user is redirected only to the error page
 
         req.session.token = token;
         res.redirect("../");
