@@ -1,5 +1,7 @@
 import Listener from "models/listener";
 import CacheManager from "./cacheManager";
+import SwarmManager from "./swarmManager";
+import DataPoint from "./models/dataPoint";
 
 
 /**
@@ -12,6 +14,11 @@ import CacheManager from "./cacheManager";
  * For a first implementation, we can filter the listeners array
  * to only keep admins or the user the data belong to
  */
+
+interface dispatchedPoint {
+    username: string;
+    data: DataPoint;
+}
 
 class Dispatcher {
     private static listeners: Listener[] = [];
@@ -48,11 +55,11 @@ class Dispatcher {
      * @param event 
      * @param data 
      */
-    public static notifyListeners(event: string, data: any){
-        if(!event || !data) return;
-        this.listeners.forEach(listener => {
-            listener.socket.emit(event, data);
-        })
+    public static notifyListeners(event: string, data: dispatchedPoint) {
+        if (!event || !data) return;
+        // Filter the listeners to only keep admins and the owener of the data
+        let allowedListeners = this.listeners.filter(listener => listener.admin || listener.username === data.username);
+        allowedListeners.forEach(listener => listener.socket.emit(event, data));
     }
 
     /**
