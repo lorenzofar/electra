@@ -10,6 +10,7 @@
     grid-area: logo;
     font-weight: bold;
     align-self: center;
+    font-size: 18pt;
 }
 
 #header > #userinfo{
