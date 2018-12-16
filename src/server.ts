@@ -83,6 +83,8 @@ router.post("/login", (req: express.Request, res: express.Response) => {
     if (!req.body) return res.status(400).end();
     let username: string = req.body && req.body.username;
     let password: string = req.body && req.body.password;
+    let headless: boolean = req.body && req.body.headless;
+
     if (!username || !password) return res.status(400).end();
 
     username = username.toLowerCase();
@@ -92,6 +94,7 @@ router.post("/login", (req: express.Request, res: express.Response) => {
     Validator.validateDashboardAccess(username, password, (authorized: boolean, admin: boolean) => {
         if (!authorized) {
             // The user is not authorized to log in
+            if(headless) return res.status(403).end();
             return res.redirect("../error");
         }
 
@@ -104,8 +107,9 @@ router.post("/login", (req: express.Request, res: express.Response) => {
         let token = TokenHelper.signToken(tokenData);
 
         console.log(`[SERVER] dashboard access granted to ${username}`);
-
         req.session.token = token;
+        
+        if(headless) return res.status(200).end();
         res.redirect("../");
     });
 });
