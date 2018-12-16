@@ -1,0 +1,14 @@
+.user-entry{
+    display: inline-flex;
+    align-items: center;
+}
+.user-dot{
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin-right: 12px;
+}
+
+.user-name:hover{
+    text-decoration: underline;
+}

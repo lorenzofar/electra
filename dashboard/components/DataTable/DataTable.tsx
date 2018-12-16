@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import UserCard from "../UserCard/UserCard";
+
 import "./style.css";
 
 interface DataTableProps {
@@ -24,7 +26,7 @@ export class DataTable extends React.Component<DataTableProps, null>{
                         {Object.keys(this.props.users).map(user => {
                             return (
                                 <tr>
-                                    <td>{user}</td>
+                                    <td><UserCard color={this.props.users[user]} username={user} /></td>
                                     {Object.keys(this.props.data).map(sensor => {
                                         if (!(user in this.props.data[sensor])) return <td>{UNDEF_VALUE}</td>
                                         let userData: any[] = this.props.data[sensor][user];

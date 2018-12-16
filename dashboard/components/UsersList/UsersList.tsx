@@ -1,11 +1,8 @@
 import * as React from "react";
 
-import "./style.css";
+import UserCard from "../UserCard/UserCard";
 
-interface UserCardProps {
-    username: string;
-    color: string;
-}
+import "./style.css";
 
 interface usersMap {
     [username: string]: string; // store the color of the user
@@ -40,10 +37,3 @@ export class UsersList extends React.Component<UserListProps, {}>{
     }
 }
 
-class UserCard extends React.Component<UserCardProps, {}>{
-    render() {
-        return (
-            <p style={{ color: this.props.color }}>{this.props.username}</p>
-        )
-    }
-}
