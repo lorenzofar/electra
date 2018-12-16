@@ -24,6 +24,11 @@ export class ChartPane extends React.Component<chartProps, {}>{
             <div id={this.props.id} className="chart-pane shadowed">
                 <span className="pane-title">{this.props.description}</span>
                 <V.VictoryChart>
+                    <V.VictoryAxis
+                        dependentAxis={true}
+                        tickFormat={(t) => `${t}`}>
+                    </V.VictoryAxis>
+                    <V.VictoryAxis></V.VictoryAxis>
                     {Object.keys(this.props.data).map((user, i) =>
                         <V.VictoryLine
                             key={i}
