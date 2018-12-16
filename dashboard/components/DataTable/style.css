@@ -1,3 +1,16 @@
 #data-table{
     margin: 8px 12px;
 }
+
+.max{
+    color: #FF3B30;
+}
+
+.min{
+    color: #007AFF;
+}
+
+.max,
+.min{
+    font-weight: bold;
+}
