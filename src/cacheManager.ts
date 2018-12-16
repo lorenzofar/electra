@@ -7,7 +7,7 @@ import DataPoint from "./models/dataPoint";
 import Dispatcher from "./dispatcher";
 
 const CACHE_LENGTH = 100; // The number of most recent data points to keep
-const TTL_MAX = 10 /* minutes */ * 60 /*seconds*/ * 1000 /* milliseconds*/; // The maximum time to wait for a device to restore its connection
+const TTL_MAX = 10 /* minutes */ * 60 /*seconds*/; // The maximum time to wait for a device to restore its connection
 
 interface parsedCacheEntry {
     username: string;
@@ -68,7 +68,7 @@ class CacheManager {
         // decrease TTL
         inactiveUsers.forEach(k => this._cache[k].TTL--);
         // Get users whose TTL is null
-        inactiveUsers = inactiveUsers.filter(k => this._cache[k].TTL === 0);
+        inactiveUsers = inactiveUsers.filter(k => this._cache[k].TTL <= 0);
         // Remove them from cache
         inactiveUsers.forEach(k => {
             delete this._cache[k];
