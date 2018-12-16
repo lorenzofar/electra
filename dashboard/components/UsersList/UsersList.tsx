@@ -27,9 +27,14 @@ export class UsersList extends React.Component<UserListProps, {}>{
             <div id="users-list" className="shadowed">
                 <span className="pane-title">Connected users</span>
                 <br></br>
-                {Object.keys(this.props.users).map(user =>
-                    <UserCard key={user} username={user} color={this.props.users[user]} />
-                )}
+                {
+                    Object.keys(this.props.users).length > 0 ?
+                        Object.keys(this.props.users).map(user =>
+                            <UserCard key={user} username={user} color={this.props.users[user]} />
+                        )
+                        :
+                        <span> No user is connected at the moment </span>
+                }
             </div>
         );
     }
