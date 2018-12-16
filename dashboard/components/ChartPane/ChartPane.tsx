@@ -23,7 +23,7 @@ export class ChartPane extends React.Component<chartProps, {}>{
         return (
             <div id={this.props.id} className="chart-pane shadowed">
                 <span className="pane-title">{this.props.description}</span>
-                <V.VictoryChart>
+                <V.VictoryChart >
                     <V.VictoryAxis
                         dependentAxis={true}
                         tickFormat={(t) => `${t}`}>
