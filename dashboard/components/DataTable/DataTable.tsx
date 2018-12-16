@@ -50,8 +50,6 @@ export class DataTable extends React.Component<DataTableProps, null>{
             });
         });
 
-        console.log(maxminMap);
-
         return (
             <div id="data-table" className="shadowed">
                 <table className="table header-fixed">
@@ -64,13 +62,14 @@ export class DataTable extends React.Component<DataTableProps, null>{
                     <tbody>
                         {Object.keys(this.props.users).map(user => {
                             return (
-                                <tr>
+                                <tr key={user}>
                                     <td><UserCard color={this.props.users[user]} username={user} /></td>
                                     {Object.keys(this.props.data).map(sensor => {
                                         if (!(user in this.props.data[sensor])) return <td>{UNDEF_VALUE}</td>
                                         let userData: any[] = this.props.data[sensor][user];
                                         return (
                                             <td
+                                                key={`${sensor}${user}`}
                                                 className={
                                                     `${maxminMap[sensor].max.user === user ? "max" : ""}
                                                     ${maxminMap[sensor].min.user === user ? "min" : ""}`
