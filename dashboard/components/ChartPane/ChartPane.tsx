@@ -36,6 +36,7 @@ export class ChartPane extends React.Component<chartProps, {}>{
                             style={
                                 { data: { stroke: this.props.strokes[user] } }
                             }
+                            interpolation={"monotoneX"}
                         >
                         </V.VictoryLine>
                     )}
