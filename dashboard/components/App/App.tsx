@@ -45,7 +45,7 @@ interface initialCacheEntry {
     data: any[];
 }
 
-const CACHE_LIMIT = 50;
+const CACHE_LIMIT = 75;
 
 class App extends React.Component<{}, AppState> {
 
