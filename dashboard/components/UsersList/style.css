@@ -1,4 +1,6 @@
 #users-list{
     margin: 8px 12px;
     padding: 12px;
+    display: flex;
+    flex-direction: column;
 }
