@@ -38,7 +38,8 @@ export class DataTable extends React.Component<DataTableProps, null>{
             maxminMap[sensor] = { max: { user: null, val: null }, min: { user: null, val: null } };
             Object.keys(sensorData).forEach(user => {
                 let userData = sensorData[user];
-                let point = userData[userData.length - 1].y;
+                let point = userData[userData.length - 1] && userData[userData.length - 1].y;
+                if(!point) return;
                 if (maxminMap[sensor].max.val == null || maxminMap[sensor].max.val < point) {
                     maxminMap[sensor].max.val = point;
                     maxminMap[sensor].max.user = user;
