@@ -77,7 +77,7 @@ class Emitter {
                 //TODO: Assign admin rights
                 let additionResult = Dispatcher.addListener(newListener);
                 if (!additionResult) {
-                    socket.send("insertionError").disconnect();
+                    //socket.send("insertionError").disconnect();
                     return;
                 }
             } else {
