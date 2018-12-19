@@ -88,12 +88,14 @@ class CacheManager {
 
     public static get parsedCache(): parsedCacheEntry[] {
         // Only return usernames and data arrays
-        let parsedCache: parsedCacheEntry[] = Object.keys(this._cache).map(k => {
-            return {
-                username: k,
-                data: this._cache[k].data
-            };
-        });
+        let parsedCache: parsedCacheEntry[] = Object.keys(this._cache)
+            .filter(k => this._cache[k].active)
+            .map(k => {
+                return {
+                    username: k,
+                    data: this._cache[k].data
+                };
+            });
         return parsedCache;
     }
 
